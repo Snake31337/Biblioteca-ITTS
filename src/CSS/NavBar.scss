@@ -1,13 +1,13 @@
 @import './ColorScheme.scss';
 
 $logoFontSize: calc(1em + 2vw);
-$linkSize: calc(1em + 1vw);
+$linkSize: calc(0.5em + 1vw);
 
 .navBar {
     display: flex;
     width: auto;
     align-items: center;
-    height: 10%;
+    height: auto;
 }
 
 .container-logo-link {

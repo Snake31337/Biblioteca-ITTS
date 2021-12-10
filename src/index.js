@@ -1,14 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+
 import App from './App';
 import NavBar from './Components/Navbar';
+import Home from './Components/Home'
+import SearchBar from './Components/SearchBar'
+
 import reportWebVitals from './reportWebVitals';
 
 
 
 ReactDOM.render(
-  <NavBar />,
+  <SearchBar />,
   document.getElementById('root')
 );
 

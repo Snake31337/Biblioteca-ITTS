@@ -1,0 +1,17 @@
+
+
+
+.grid-container {
+    display: grid;
+    height: auto;
+    width: 100%;
+    column-gap: 10px;
+    row-gap: 10px;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    grid-template-rows: 1fr 4fr;
+    box-sizing: border-box; 
+}
+
+.grid-item {
+    background-color: blue;
+}
