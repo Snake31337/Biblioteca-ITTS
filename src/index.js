@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import NavBar from './Components/Navbar';
 import reportWebVitals from './reportWebVitals';
 
+
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <NavBar />,
   document.getElementById('root')
 );
 

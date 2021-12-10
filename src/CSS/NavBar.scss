@@ -1,0 +1,56 @@
+@import './ColorScheme.scss';
+
+$logoFontSize: calc(1em + 2vw);
+$linkSize: calc(1em + 1vw);
+
+.navBar {
+    display: flex;
+    width: auto;
+    align-items: center;
+    height: 10%;
+}
+
+.container-logo-link {
+    width: 80%;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    width: max-content;
+}
+
+.logo {
+    width: 5vw;
+    margin-right: 10px;
+}
+
+.logo-text {
+    //@at-root: $logoFontSize;
+    color: $primary_1;
+}
+
+
+.link-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.link {
+    font-size: $linkSize;
+    color: $secondary_1;
+    text-align: center;
+    text-decoration: none;
+    height: auto;
+    padding: 10px;
+    margin-right: 5%;
+    min-width: 10%;
+    border-bottom: 2px solid transparent;
+}
+
+.link:hover:not(.logo-link) {
+    color: $secondary_hover;
+    border-bottom: 2px solid $secondary_hover;
+}
