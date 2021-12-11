@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals';
 
 
 ReactDOM.render(
-  <SearchBar />,
+  <Home />,
   document.getElementById('root')
 );
 
