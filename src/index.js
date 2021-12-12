@@ -7,6 +7,7 @@ import App from './App';
 import NavBar from './Components/Navbar';
 import Home from './Components/Home'
 import SearchBar from './Components/SearchBar'
+import BookTable from './Components/BookTable';
 
 import reportWebVitals from './reportWebVitals';
 

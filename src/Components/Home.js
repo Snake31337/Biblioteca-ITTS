@@ -1,6 +1,7 @@
 import '../CSS/Home.scss';
 import NavBar from './Navbar';
 import SearchBar from './SearchBar';
+import BookTable from './BookTable';
 
 function Home() {
     return (
@@ -18,6 +19,7 @@ function Home() {
                     <div className="searchBar-container">
                         <SearchBar />
                     </div>
+                    <BookTable />
                 </div>
             </div>
             <div className="grid-item right-sidebar">f</div>
