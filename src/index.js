@@ -8,6 +8,7 @@ import NavBar from './Components/Navbar';
 import Home from './Components/Home'
 import SearchBar from './Components/SearchBar'
 import BookTable from './Components/BookTable';
+import UserWidget from './Components/UserWidget';
 
 import reportWebVitals from './reportWebVitals';
 

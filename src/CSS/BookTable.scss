@@ -2,8 +2,39 @@
 
 .table-container {
     width: 100%;
+    height: 100%;
 }
 
+// table tag
 .book-table {
     width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+    border: 3px solid $primary_1;
+}
+
+// table header
+thead {
+    background-color: $primary_2;
+}
+
+tr {
+    max-height: 50px;
+}
+
+// single element of table header, e.g. 'Titolo'
+th {
+    text-align: left;
+}
+
+// change style of table text
+th, td {
+    font-size: 16px;
+    padding: 10px;
+}
+
+tbody > tr {
+    &:nth-child(even) {
+        background-color: $secondary_2;
+    }
 }
