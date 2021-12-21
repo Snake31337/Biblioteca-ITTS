@@ -9,13 +9,14 @@ import Home from './Components/Home'
 import SearchBar from './Components/SearchBar'
 import BookTable from './Components/BookTable';
 import UserWidget from './Components/UserWidget';
+import SubNavBar from './Components/SubNavBar';
 
 import reportWebVitals from './reportWebVitals';
 
 
 
 ReactDOM.render(
-  <Home />,
+  <SubNavBar />,
   document.getElementById('root')
 );
 

@@ -1,0 +1,27 @@
+@import './ColorScheme.scss';
+
+
+.subNavBar-link-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: $primary_3;
+    border-radius: 0px 0px 18px 18px;
+}
+
+.subNavBar-link {
+    display: block;
+    text-decoration: none;
+    min-width: 10%;
+    padding: 20px;
+    text-align: center;
+    font-size: 2em;
+    color: white;
+    border-bottom: 5px solid $primary_3;
+
+    &:hover {
+        border-bottom: 5px solid $secondary_2;
+    }
+}
