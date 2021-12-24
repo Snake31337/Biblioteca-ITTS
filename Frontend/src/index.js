@@ -10,13 +10,16 @@ import SearchBar from './Components/SearchBar'
 import BookTable from './Components/BookTable';
 import UserWidget from './Components/UserWidget';
 import SubNavBar from './Components/SubNavBar';
+import LanguageSelect from './Components/LanguageSelect';
+import AccountButton from './Components/AccountButton';
 
 import reportWebVitals from './reportWebVitals';
 
 
 
+
 ReactDOM.render(
-  <SubNavBar />,
+  <AccountButton />,
   document.getElementById('root')
 );
 
