@@ -23,7 +23,7 @@
             return Array(false, "Can't connect to SQL server (" . mysqli_connect_error() . ")");
         else
         {
-            $sqlQuery = "CREATE DATABASE " . $GLOBALS['dbName'];
+            $sqlQuery = "CREATE DATABASE " . $GLOBALS['dbName'] . " CHARACTER SET utf8 COLLATE utf8_general_ci";
             if(mysqli_query($mysqli, $sqlQuery))
                 return Array(true);
             else
