@@ -83,7 +83,9 @@
     define("PASSWORD", NULL);
     define("DBNAME", "itts_biblioteca");
 
-    $requestType = $_POST["type"];
+    //$requestType = $_POST["type"];
+    $requestData = json_decode(file_get_contents('php://input'), true);
+    $requestType = $requestData["type"];
 
     $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
     $operation = $dbManager->SelectDatabase(DBNAME);
