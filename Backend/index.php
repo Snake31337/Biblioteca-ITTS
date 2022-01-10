@@ -33,7 +33,7 @@
             $this->lastQuery = $queryToSend;
             $queryResult = mysqli_query($this->mysqli, $queryToSend);
             if($queryResult)
-                return Array("successful" => true, "response" => mysqli_fetch_all($queryResult));
+                return Array("successful" => true, "response" => $queryResult);
             else
                 return Array("successful" => false, "response" => mysqli_error($this->mysqli));
         }
@@ -59,16 +59,18 @@
             return $this->Query($sqlQuery);
         }
 
-        public function InsertQuery($tableName, $columns, $values)
+        public function InsertRow($tableName, $columns, $values)
         {
-            $sqlQuery = "INSERT INTO " . $tableName . " (" . implode(",", $columns) . ") VALUES (" . implode(",", $values) . ")";
+            $sqlQuery = "INSERT INTO " . $tableName;
+            $sqlQuery .= " (" . implode(",", $columns) . ")";
+            $sqlQuery .= " VALUES (" . implode(",", $values) . ")";
             return $this->Query($sqlQuery);
         }
 
-        public function SelectQuery($tableName, $columns, $whereCondition)
+        public function SelectRows($tableName, $columns, $whereCondition)
         {
             $sqlQuery = "SELECT " . implode(",", $columns) . " FROM " . $tableName;
-            if(isset($whereCondition))
+            if($whereCondition != "")
                 $sqlQuery .= " WHERE " . $whereCondition;
             return $this->Query($sqlQuery);
         }
@@ -81,31 +83,69 @@
 
     $requestType = $_POST["type"];
 
-    if(isset($requestType))
+    $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
+    $operation = $dbManager->SelectDatabase(DBNAME);
+    if($operation["successful"])
     {
-        if($requestType == "listAllBooks")
+        if(isset($requestType))
         {
-            respond(501, "Not implemented yet");
-        }
-        else if($requestType == "authenticateUser")
-        {
-            respond(501, "Not implemented yet"); //Not implemented
-        }
-        else if($requestType == "test")
-        {
-            $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
-            $operation = $dbManager->SelectDatabase(DBNAME);
-            respond(200, $operation["response"]);
+            if($requestType == "listAllBooks")
+            {
+                $operation = $dbManager->SelectRows("Libro", Array("*"), "");
+                if($operation["successful"])
+                {
+                    respond(200, mysqli_fetch_all($operation["response"]));
+                }
+                else
+                {
+                    respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                }
+            }
+            else if($requestType == "insertBook")
+            {
+                if(isset($_POST["bookArgs"]))
+                {
+                    $bookArgs = explode(",", $_POST["bookArgs"]);
+                    $operation = $dbManager->InsertRow(
+                        "Libro", 
+                        Array("Titolo", "Lingua", "Editore", "AnnoPubblicazione", "Categoria", "ISBN"),
+                        Array("'" . $bookArgs[0] . "'", "'" . $bookArgs[1] . "'", "'" . $bookArgs[2] . "'", $bookArgs[3], "'" . $bookArgs[4] . "'", "'" . $bookArgs[5] . "'")
+                    );
+                    if($operation["successful"])
+                    {
+                        respond(200, $operation["response"]);
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't insert row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                    }
+                }
+                else
+                {
+                    respond(400, "'insertBook' needs 'bookArgs' which is an array of a Book attributes");
+                }
+            }
+            else if($requestType == "test")
+            {
+                $testVar = Array("");
+                respond(200, empty($testVar));
+            }
+            else
+            {
+                respond(400, "Invalid value for 'type'"); //Bad request
+            }
         }
         else
         {
-            respond(400, "Invalid value for 'type'"); //Bad request
+            respond(400, "'type' POST variable not set"); //Bad request
         }
     }
     else
     {
-        respond(400, "'type' POST variable not set"); //Bad request
+        respond(500, "Can't select database: " . $oepration["response"]);
     }
+
+    
 
     die;
 ?>
