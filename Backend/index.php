@@ -94,11 +94,11 @@
                 $operation = $dbManager->SelectRows("Libro", Array("*"), "");
                 if($operation["successful"])
                 {
-                    respond(200, mysqli_fetch_all($operation["response"]));
+                    respond(200, mysqli_fetch_all($operation["response"])); //Ok
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                    respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                 }
             }
             else if($requestType == "insertBook")
@@ -113,16 +113,16 @@
                     );
                     if($operation["successful"])
                     {
-                        respond(200, $operation["response"]);
+                        respond(200, "Row successfully inserted (" . $operation["response"] . ")"); //Ok
                     }
                     else
                     {
-                        respond(500, "Couldn't insert row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                        respond(500, "Couldn't insert row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                     }
                 }
                 else
                 {
-                    respond(400, "'insertBook' needs 'bookArgs' which is an array of a Book attributes");
+                    respond(400, "'insertBook' needs 'bookArgs' which is an array of a Book attributes"); //Bad request
                 }
             }
             else
@@ -137,10 +137,8 @@
     }
     else
     {
-        respond(500, "Can't select database: " . $oepration["response"]);
+        respond(500, "Can't select database: " . $oepration["response"]); //Internal server error
     }
-
-    
 
     die;
 ?>
