@@ -1,7 +1,52 @@
+@import 'ColorScheme.scss';
 
 
+.Home {
+    height: 1920px;
+}
+
+.navBar-container {
+    background-color: $secondary_2;
+}
 
 .grid-container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    background-color: $secondary_2;
+}
+
+.grid-item {
+    //background-color: $primary_1;
+}
+
+.main {
+    background-color: white;
+}
+
+.main-wrapper {
+    margin-top: 50px;
+    margin-left: 2%;
+    margin-right: 2%
+}
+
+.main-item {
+    margin-bottom: 20px;
+}
+
+.searchBar-container {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.bookTable-container {
+    
+}
+
+
+
+
+/*.grid-container {
     display: grid;
     height: auto;
     width: 100%;
@@ -23,3 +68,4 @@
 .searchBar-container {
 
 }
+*/

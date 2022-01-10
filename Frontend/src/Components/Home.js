@@ -5,7 +5,31 @@ import BookTable from './BookTable';
 
 function Home() {
     return (
-        <div className="grid-container">
+        <div className="Home">
+            <header className="navBar-container">
+                <NavBar />
+            </header>
+            <div className="grid-container">
+                <div className="grid-item left-sidebar"></div>
+                <div className="grid-item main">
+                    <div className="main-wrapper">
+                        <div className="main-item searchBar-container">
+                            <SearchBar />
+                        </div>
+                        
+                        <div class="main-item bookTable-container">
+                            <BookTable />
+                        </div>
+                    </div>
+                </div>
+                <div className="grid-item rigth-sidebar"></div>
+            </div>
+
+        </div>
+        
+
+
+        /*<div className="grid-container">
             <div className="grid-item left-sidebar top-left">a</div>
             <div className="grid-item home-top">
                 <div className="navBar-container">
@@ -23,7 +47,7 @@ function Home() {
                 </div>
             </div>
             <div className="grid-item right-sidebar">f</div>
-        </div>
+        </div>*/
     );
 }
 
