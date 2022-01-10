@@ -14,12 +14,18 @@ import LanguageSelect from './Components/LanguageSelect';
 import AccountButton from './Components/AccountButton';
 
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 
 
 ReactDOM.render(
-  <Home />,
+  <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}>
+          
+        </Route>
+      </Routes>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
