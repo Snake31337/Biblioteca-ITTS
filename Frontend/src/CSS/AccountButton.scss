@@ -1,14 +1,41 @@
 @import './ColorScheme.scss';
 
+.account-button {
+    position: relative;
+    display: inline-block;
+    width: 15%;
+
+    &:hover .dropdown-content { // Quando fai hover sul bottone mostra il dropdown
+        display: block;
+    }
+}
+
 .accountButton-container {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    width: 150px;
     padding: 10px;
     background-color: $primary_1;
     text-decoration: none;
     color: white;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    width: 100%;
+}
+
+.accountButton-links {
+    display: block;
+    font-size: 1em;
+    text-decoration: none;
+    padding: 10px;
+    color: $primary_1;
+
+    &:hover { // Quando fai hover sul link del dropdown cambia colore background
+        background-color: $secondary_1;
+    }
 }
 
 .icon {
