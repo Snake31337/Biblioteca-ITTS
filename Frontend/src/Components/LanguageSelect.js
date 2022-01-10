@@ -4,11 +4,25 @@ import '../CSS/LanguageSelect.scss';
 //https://codyhouse.co/blog/post/accessible-language-picker
 
 function LanguageSelect() {
+    var langs = [
+        {
+            label: "Italiano",
+            value: "it_IT"
+        },
+        {
+            label: "English",
+            value: "en_US"
+        }
+    ];
+
+    
     return(
         <div className="language-select-container">
             <select className="language-select" name="language-picker-select" id="language-picker-select">
-                <option lang="it" value="italiano" selected>Italiano</option>
-                <option lang="en" value="english">English</option>
+                {langs.map((lang) => (
+                    <option value={lang.value}>{lang.label}</option>
+                ))};
+
             </select>
         </div>
     );
