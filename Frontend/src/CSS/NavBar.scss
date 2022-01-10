@@ -1,17 +1,55 @@
 @import './ColorScheme.scss';
 
-$logoFontSize: calc(1em + 2vw);
+$logoFontSize: calc(1.3em + 1vw);
 $linkSize: calc(0.5em + 1vw);
 
 .navBar {
-    display: flex;
+    //Raga non togliete sta roba che è essenziale
+    position: relative;
+    overflow: hidden;
+    
+
     width: auto;
-    align-items: center;
+    //align-items: center;
     height: auto;
+    
+    border-radius: 0px 0px 18px 18px;
+    background-color: $primary_1;
+    padding: 1px;
+    box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.325);
+}
+
+.nav-items{
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    margin: 5px 32px 10px 32px;
+}
+
+.nav-centered {
+    float: none;
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.nav-right {
+    float: right;
+
+}
+  
+.nav-left {
+    float: left;
 }
 
 .container-logo-link {
-    width: 80%;
+   
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .logo-link {
@@ -21,14 +59,30 @@ $linkSize: calc(0.5em + 1vw);
 }
 
 .logo {
-    width: 5vw;
-    margin-right: 10px;
+    
+    width: $logoFontSize;
+    //width: 3.8vh;
+    @media screen and (min-width: 992px) {
+        element {
+            /* font-size: 2.5vh; */
+            width: 2.5vw;
+        }
+    }
+    
+    border-radius: 5px;
 }
 
 .logo-text {
     //@at-root: $logoFontSize;
-    color: $primary_1;
+    color: $secondary_1;
+    @media screen and (min-width: 992px) {
+        element {
+            /* font-size: 2.5vh; */
+            font-size: 2.5vw;
+        }
+    }
 }
+
 
 
 .link-container {
