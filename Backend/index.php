@@ -76,6 +76,8 @@
         }
     }
 
+    header('Access-Control-Allow-Origin: *');
+
     define("HOSTNAME", "127.0.0.1");
     define("USERNAME", "root");
     define("PASSWORD", NULL);
