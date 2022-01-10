@@ -1,8 +1,8 @@
 <?php
-    $hostname = "127.0.0.1";
-    $username = "root";
-    $password = NULL;
-    $dbName = "itts_biblioteca";
+    define("HOSTNAME", "127.0.0.1");
+    define("USERNAME", "root");
+    define("PASSWORD", NULL);
+    define("DBNAME", "itts_biblioteca");
 
     function respond($statusCode, $data)
     {
@@ -18,7 +18,7 @@
 
     function databaseInit()
     {
-        $mysqli = mysqli_connect($GLOBALS['hostname'], $GLOBALS['username'], $GLOBALS['password']);
+        $mysqli = mysqli_connect(HOSTNAME, USERNAME, PASSWORD);
         if (!$mysqli)
             return Array(false, "Can't connect to SQL server (" . mysqli_connect_error() . ")");
         else
@@ -41,7 +41,7 @@
 
     function databaseConnect()
     {
-        $mysqli = mysqli_connect($GLOBALS['hostname'], $GLOBALS['username'], $GLOBALS['password'], $GLOBALS['dbName']);
+        $mysqli = mysqli_connect(HOSTNAME, USERNAME, PASSWORD, DBNAME);
         if (!$mysqli)
             return Array(false, mysqli_connect_error());
         else
@@ -106,7 +106,7 @@
         {
             $conn = databaseConnect();
         }
-        elseif($requestType == "authenticateUser")
+        else if($requestType == "authenticateUser")
         {
             respond(501, "Not implemented yet"); //Not implemented
         }
