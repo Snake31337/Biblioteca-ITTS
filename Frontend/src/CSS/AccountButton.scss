@@ -3,7 +3,7 @@
 .account-button {
     position: relative;
     display: inline-block;
-    width: 15%;
+    width: 100%;
 
     &:hover .dropdown-content { // Quando fai hover sul bottone mostra il dropdown
         display: block;
@@ -21,10 +21,10 @@
 }
 
 .dropdown-content {
-    display: none;
+    display: block;
     position: absolute;
     width: 100%;
-}
+}   
 
 .accountButton-links {
     display: block;

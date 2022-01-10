@@ -17,9 +17,9 @@ function NavBar() {
                 </a>    
             </div>
             
-            <div className="nav-right nav-items" > 
+            <div className="nav-right nav-items"> 
                 <button>Tema Scuro</button>
-                <AccountButton> </AccountButton>
+                <AccountButton />
             </div>
         </nav>
     );

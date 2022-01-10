@@ -10,12 +10,15 @@ function SearchBar() {
                     <i className="bi bi-search"></i>
                 </button>
             </div>
-            <div className="filter-container">
-                <a href="#">Filtri avanzati</a>
-            </div>
         </div>  
     );
 }
+
+/*
+<div className="filter-container">
+    <a href="#">Filtri avanzati</a>
+</div>
+*/
 
 //https://formatjs.io/docs/getting-started/installation/
 export default SearchBar;
