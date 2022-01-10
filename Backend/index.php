@@ -89,7 +89,7 @@
     {
         if(isset($requestType))
         {
-            if($requestType == "listAllBooks")
+            if($requestType == "listBooks")
             {
                 $operation = $dbManager->SelectRows("Libro", Array("*"), "");
                 if($operation["successful"])
