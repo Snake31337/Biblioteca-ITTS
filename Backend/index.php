@@ -125,6 +125,26 @@
                     respond(400, "'insertBook' needs 'bookArgs' which is an array of a Book attributes"); //Bad request
                 }
             }
+            else if($requestType == "searchBook")
+            {
+                if(isset($_POST["keyword"]))
+                {
+                    $keyword = $_POST["keyword"];
+                    $operation = $dbManager->SelectRows("Libro", Array("*"), "Titolo LIKE '%" . $keyword . "%'");
+                    if($operation["successful"])
+                    {
+                        respond(200, mysqli_fetch_all($operation["response"])); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
+                }
+                else
+                {
+                    respond(400, "'searchBook' needs 'keyword' which is the string to be searched"); //Bad request
+                }
+            }
             else
             {
                 respond(400, "Invalid value for 'type'"); //Bad request
