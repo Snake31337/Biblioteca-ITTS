@@ -1,9 +1,4 @@
 <?php
-    define("HOSTNAME", "127.0.0.1");
-    define("USERNAME", "root");
-    define("PASSWORD", NULL);
-    define("DBNAME", "itts_biblioteca");
-
     function respond($statusCode, $data)
     {
         http_response_code($statusCode);
@@ -16,99 +11,91 @@
         die($errorText);
     }
 
-    function databaseInit()
+    class DatabaseManager
     {
-        $mysqli = mysqli_connect(HOSTNAME, USERNAME, PASSWORD);
-        if (!$mysqli)
-            return Array(false, "Can't connect to SQL server (" . mysqli_connect_error() . ")");
-        else
+        private $mysqli;
+        public $lastQuery;
+
+        public function __construct($hostname, $username, $password)
         {
-            $sqlQuery = "CREATE DATABASE " . $GLOBALS['dbName'] . " CHARACTER SET utf8 COLLATE utf8_general_ci";
-            if(mysqli_query($mysqli, $sqlQuery))
-                return Array(true);
-            else
-                return Array(false, "Can't create database (" . mysqli_error($mysqli) . ")");
+            $this->mysqli = mysqli_connect($hostname, $username, $password);
+            if (!$this->mysqli)
+                throw new Exception("Couldn't connect to SQL server: " . mysqli_connect_error());
         }
 
-        mysqli_close($mysqli);
-
-        /*$mysqli = mysqli_connect("127.0.0.1", "root", "", $dbName);
-        if (!$mysqli)
-            return Array(false, mysqli_connect_error());
-        else*/
-            
-    }
-
-    function databaseConnect()
-    {
-        $mysqli = mysqli_connect(HOSTNAME, USERNAME, PASSWORD, DBNAME);
-        if (!$mysqli)
-            return Array(false, mysqli_connect_error());
-        else
-            return Array(true, $mysqli);
-    }
-
-    function databaseInsertRowQuery($databaseConnection, $tableName, $columns, $values)
-    {
-        $sqlQuery = "INSERT INTO " . $tableName . " (" . implode(",", $columns) . ") VALUES (" . implode(",", $values) . ")";
-        if(mysqli_query($databaseConnection, $sqlQuery))
-            return Array(true);
-        else
-            return Array(false, mysqli_error($databaseConnection));
-    }
-
-    function databaseSelectQuery($databaseConnection, $tableName, $columns, $whereCondition)
-    {
-        $sqlQuery = "SELECT " . implode(",", $columns) . " FROM " . $tableName;
-        if(isset($whereCondition))
-            $sqlQuery .= " WHERE " . $whereCondition;
-        
-        $result = mysqli_query($databaseConnection, $sqlQuery);
-
-        if($result)
+        public function __destruct()
         {
-            if(mysqli_num_rows($result) > 0)
-            {
-                $returnArr = Array();
-                while($row = mysqli_fetch_assoc($result))
-                    array_push($returnArr, $row);
+            mysqli_close($this->mysqli);
+        }
 
-                return Array(true, $returnArr);
-            }
+        private function Query($queryToSend)
+        {
+            $this->lastQuery = $queryToSend;
+            $queryResult = mysqli_query($this->mysqli, $queryToSend);
+            if($queryResult)
+                return Array("successful" => true, "response" => mysqli_fetch_all($queryResult));
             else
-            {
-                return Array(false, "No results");
-            }
-        }    
-        else
+                return Array("successful" => false, "response" => mysqli_error($this->mysqli));
+        }
+
+        public function SelectDatabase($databaseName)
         {
-            return Array(false, mysqli_error($databaseConnection));
+            $sqlQuery = "USE " . $databaseName;
+            return $this->Query($sqlQuery);
+        }
+
+        public function CreateDatabase($databaseName)
+        {
+            $sqlQuery = "CREATE DATABASE " . $databaseName . " CHARACTER SET utf8 COLLATE utf8_general_ci";
+            return $this->Query($sqlQuery);
+        }
+
+        public function CreateTable($tableName, $columnsAndTypes, $primaryKey) //columnsAndTypes is an array of pairs
+        {
+            $sqlQuery = "CREATE TABLE " . $tableName . " (";
+            for($i = 0; $i < count($columnsAndTypes); $i++)
+                $sqlQuery += implode(" ", $columnsAndTypes[$i]) . ",";
+            $sqlQuery += "PRIMARY KEY (" . $primaryKey . "));";
+            return $this->Query($sqlQuery);
+        }
+
+        public function InsertQuery($tableName, $columns, $values)
+        {
+            $sqlQuery = "INSERT INTO " . $tableName . " (" . implode(",", $columns) . ") VALUES (" . implode(",", $values) . ")";
+            return $this->Query($sqlQuery);
+        }
+
+        public function SelectQuery($tableName, $columns, $whereCondition)
+        {
+            $sqlQuery = "SELECT " . implode(",", $columns) . " FROM " . $tableName;
+            if(isset($whereCondition))
+                $sqlQuery .= " WHERE " . $whereCondition;
+            return $this->Query($sqlQuery);
         }
     }
+
+    define("HOSTNAME", "127.0.0.1");
+    define("USERNAME", "root");
+    define("PASSWORD", NULL);
+    define("DBNAME", "itts_biblioteca");
 
     $requestType = $_POST["type"];
 
     if(isset($requestType))
     {
-        if($requestType == "initDatabase")
+        if($requestType == "listAllBooks")
         {
-            $operation = databaseInit();
-            if($operation[0])
-            {
-                respond(201, "Database created"); //Created
-            }
-            else
-            {
-                respond(500, "An error has occurred: " . $operation[1]); //Internal server error
-            }
-        }
-        else if($requestType == "listAllBooks")
-        {
-            $conn = databaseConnect();
+            respond(501, "Not implemented yet");
         }
         else if($requestType == "authenticateUser")
         {
             respond(501, "Not implemented yet"); //Not implemented
+        }
+        else if($requestType == "test")
+        {
+            $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
+            $operation = $dbManager->SelectDatabase(DBNAME);
+            respond(200, $operation["response"]);
         }
         else
         {
