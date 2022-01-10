@@ -137,7 +137,7 @@
     }
     else
     {
-        respond(500, "Can't select database: " . $oepration["response"]); //Internal server error
+        respond(500, "Can't select database: " . $operation["response"]); //Internal server error
     }
 
     die;
