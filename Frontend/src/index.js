@@ -19,7 +19,7 @@ import reportWebVitals from './reportWebVitals';
 
 
 ReactDOM.render(
-  <AccountButton />,
+  <Home />,
   document.getElementById('root')
 );
 
