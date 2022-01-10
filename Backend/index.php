@@ -125,11 +125,6 @@
                     respond(400, "'insertBook' needs 'bookArgs' which is an array of a Book attributes");
                 }
             }
-            else if($requestType == "test")
-            {
-                $testVar = Array("");
-                respond(200, empty($testVar));
-            }
             else
             {
                 respond(400, "Invalid value for 'type'"); //Bad request
