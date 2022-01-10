@@ -94,7 +94,10 @@
                 $operation = $dbManager->SelectRows("Libro", Array("*"), "");
                 if($operation["successful"])
                 {
-                    respond(200, mysqli_fetch_all($operation["response"])); //Ok
+                    $resultArray = Array();
+                    while($row = mysqli_fetch_assoc($operation["response"]))
+                        array_push($resultArray, $row);
+                    respond(200, $resultArray); //Ok
                 }
                 else
                 {
@@ -133,7 +136,10 @@
                     $operation = $dbManager->SelectRows("Libro", Array("*"), "Titolo LIKE '%" . $keyword . "%'");
                     if($operation["successful"])
                     {
-                        respond(200, mysqli_fetch_all($operation["response"])); //Ok
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($operation["response"]))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
                     }
                     else
                     {
