@@ -2,6 +2,7 @@ import '../CSS/Home.scss';
 import NavBar from './Navbar';
 import SearchBar from './SearchBar';
 import BookTable from './BookTable';
+import SideNavBar from './SideNavBar';
 
 
 
@@ -12,7 +13,9 @@ function Home() {
                 <NavBar />
             </header>
             <div className="grid-container">
-                <div className="grid-item left-sidebar"></div>
+                <div className="grid-item left-sidebar">
+                    <SideNavBar />
+                </div>
                 <div className="grid-item main">
                     <div className="main-wrapper">
                         <div className="main-item searchBar-container">
