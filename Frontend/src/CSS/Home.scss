@@ -13,6 +13,7 @@
     display: grid;
     height: 100%;
     grid-template-columns: 0.5fr 2fr 0.5fr;
+    column-gap: 20px;
     background-color: $secondary_2;
 }
 
@@ -41,6 +42,10 @@
 
 .bookTable-container {
     
+}
+
+.sideNavBar-container {
+    margin-top: 50px;
 }
 
 

@@ -14,7 +14,9 @@ function Home() {
             </header>
             <div className="grid-container">
                 <div className="grid-item left-sidebar">
-                    <SideNavBar />
+                    <div className="sideNavBar-container">
+                        <SideNavBar />
+                    </div>
                 </div>
                 <div className="grid-item main">
                     <div className="main-wrapper">
