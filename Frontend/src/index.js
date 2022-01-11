@@ -15,13 +15,14 @@ import AccountButton from './Components/AccountButton';
 
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UserManagement from './Components/UserManagement';
 
 
 
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}>
+        <Route path="/" element={<UserManagement />}>
           
         </Route>
       </Routes>
