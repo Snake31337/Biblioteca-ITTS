@@ -2,12 +2,8 @@
     function respond($statusCode, $data)
     {
         http_response_code($statusCode);
-        $errorText = "";
-        if(isset($data))
-        {
-            header('Content-Type: application/json; charset=utf-8');
-            $errorText = json_encode($data);
-        }
+        header('Content-Type: application/json; charset=utf-8');
+        $errorText = json_encode($data);
         die($errorText);
     }
 
@@ -44,21 +40,6 @@
             return $this->Query($sqlQuery);
         }
 
-        public function CreateDatabase($databaseName)
-        {
-            $sqlQuery = "CREATE DATABASE " . $databaseName . " CHARACTER SET utf8 COLLATE utf8_general_ci";
-            return $this->Query($sqlQuery);
-        }
-
-        public function CreateTable($tableName, $columnsAndTypes, $primaryKey) //columnsAndTypes is an array of pairs
-        {
-            $sqlQuery = "CREATE TABLE " . $tableName . " (";
-            for($i = 0; $i < count($columnsAndTypes); $i++)
-                $sqlQuery += implode(" ", $columnsAndTypes[$i]) . ",";
-            $sqlQuery += "PRIMARY KEY (" . $primaryKey . "));";
-            return $this->Query($sqlQuery);
-        }
-
         public function InsertRow($tableName, $columns, $values)
         {
             $sqlQuery = "INSERT INTO " . $tableName;
@@ -87,7 +68,14 @@
     $requestData = json_decode(file_get_contents('php://input'), true);
     $requestType = $requestData["type"];
 
-    $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
+    try
+    {
+        $dbManager = new DatabaseManager(HOSTNAME, USERNAME, PASSWORD);
+    }
+    catch (Exception $e)
+    {
+        respond(500, "Can't connect to SQL server: " . $e->getMessage());
+    }
     $operation = $dbManager->SelectDatabase(DBNAME);
     if($operation["successful"])
     {
