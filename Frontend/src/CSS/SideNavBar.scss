@@ -1,0 +1,30 @@
+@import './ColorScheme.scss';
+
+.sideNavBar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: $secondary_1;
+}
+
+.sideNavBar-link {
+    width: 80%;
+    box-sizing: border-box;
+    
+    background-color: $primary_2;
+    color: white;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 0px 10px 10px 0;
+    text-decoration: none;
+
+    &:hover {
+        width: 100%;
+    }
+}
+
+.sideNavBar-link-active {
+    background-color: $primary_3;
+    width: 100%;
+}
