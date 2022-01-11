@@ -2,7 +2,7 @@
 import '../CSS/UserManagement.scss'
 import '../CSS/Home.scss';
 import NavBar from './Navbar';
-import BookTable from './UserTable';
+import UserTable from './UserTable';
 import UserForm from './UserForm'
 
 function UserManagement() {
@@ -14,7 +14,7 @@ function UserManagement() {
             <div className="centered-media">
                 <h1 className="title">Utenti</h1>
                 <UserForm />
-                <BookTable />
+                <UserTable />
             </div>
         </div>
     );
