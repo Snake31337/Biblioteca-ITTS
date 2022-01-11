@@ -17,14 +17,16 @@ import SearchPage from './Components/SearchPage'
 import UserManagement from './Components/UserManagement'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import UserManagement from './Components/UserManagement';
 
 
 
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        <Route path="/" element={<UserTable />}></Route>
-        <Route path="/search/:nome" element={<SearchPage />}></Route>
+        <Route path="/" element={<UserManagement />}>
+          
+        </Route>
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
