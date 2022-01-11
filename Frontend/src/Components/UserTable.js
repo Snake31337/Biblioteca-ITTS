@@ -1,7 +1,37 @@
-function UserTable(){
+import React, { Component } from 'react';
 
+export default class UserTable extends React.Component {
+    constructor(props) {
+        super(props);
+  
+        this.state = {
+          data : []
+        };
+    }
+
+    componentWillMount() {
+        this.renderMyData();
+    }
+
+    renderMyData(){
+        fetch('http://192.168.105.77:8080/', {
+            method: 'POST',
+            body: JSON.stringify({
+          type: 'listUsers',
+        })
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              this.setState({ data : responseJson })
+            })
+            .then((response) => {console.log(response.json())})
+            .catch((error) => {
+              console.error(error);
+            });
+    }
+
+    render(){
     return(
-
     <div className="table-container">
         <table className="book-table">
             <thead>
@@ -15,25 +45,21 @@ function UserTable(){
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>The things they carried</td>
-                    <td>Tim O' Brien</td>
-                    <td>IDK</td>
-                    <td>1995</td>
-                    <td>Inglese</td>
-                </tr>
-                <tr>
-                    <td>Of mice and men</td>
-                    <td>Leonardo Grimaldi</td>
-                    <td>LOL</td>
-                    <td>2004</td>
-                    <td>Inglese</td>
-                </tr>   
+            {
+                this.state.data.map((studente) => (
+                            <tr>
+                            <td>{studente.CodiceFiscale}</td>
+                            <td>{studente.Nome} </td>
+                            <td>{studente.Cognome}</td>
+                            <td>{studente.DataRegistrazioneTessera}</td>
+                            <td>{studente.Indirizzo}</td>
+                            <td>{studente.NumeroTessera}</td>
+                        </tr>
+                ))
+            }
             </tbody>
         </table>
     </div>
-    );
+    )};
     
 }
-
-export default UserTable;

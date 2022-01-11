@@ -27,7 +27,7 @@ class UserForm extends React.Component{
                 Aggiungi un utente
                 </div>
                 <div className="form-container">
-                    <form onSubmit={handleSubmit}>
+                    <form>
                     <label>
                         Codice Fiscale:
                         <input name='cFiscale' type="text"></input>

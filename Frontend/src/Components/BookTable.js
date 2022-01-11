@@ -19,8 +19,8 @@ export default class BookTable extends React.Component  {
         fetch('http://192.168.105.77:8080/', {
             method: 'POST',
             body: JSON.stringify({
-          type: 'listBooks',
-        })
+                type: 'listBooks',
+              })
         })
             .then((response) => response.json())
             .then((responseJson) => {

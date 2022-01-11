@@ -1,5 +1,5 @@
 
-import '../CSS/AccountManagement.scss'
+import '../CSS/UserManagement.scss'
 import '../CSS/Home.scss';
 import NavBar from './Navbar';
 import BookTable from './UserTable';
