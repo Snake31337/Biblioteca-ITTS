@@ -2,7 +2,7 @@ import logo from '../Images/logo.bmp';
 import '../CSS/NavBar.scss';
 import AccountButton from './AccountButton';
 import LanguageSelect from './LanguageSelect';
-
+import { Link } from "react-router-dom";
 
 function NavBar() {
     return(
@@ -12,9 +12,9 @@ function NavBar() {
             </div>
 
             <div className="container-logo-link nav-centered">
-                <a className="link logo-link" href="#">
+                <Link to="/" className="link logo-link" href="#">
                     <img className="logo" src={logo} alt="Logo dell'ITTS O.Belluzzi"/>
-                </a>    
+                </Link>    
             </div>
             
             <div className="nav-right nav-items"> 
