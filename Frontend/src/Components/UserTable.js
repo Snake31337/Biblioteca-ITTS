@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import '../CSS/BookTable.scss';
 
 export default class UserTable extends React.Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export default class UserTable extends React.Component {
     <div className="table-container">
         <table className="book-table">
             <thead>
-                <tr>
+                <tr className='first-row'>
                     <th><i className="bi bi-file-earmark-font"></i>C. Fiscale</th>
                     <th><i className="bi bi-people-fill"></i>Nome/i</th>
                     <th>Cognome</th>

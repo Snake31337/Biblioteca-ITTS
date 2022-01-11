@@ -42,12 +42,12 @@ export default class BookTable extends React.Component  {
         <div className="table-container">
             <table className="book-table">
                 <thead>
-                    <tr>
+                    <tr className='first-row'>
                         <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
                         <th><i className="bi bi-people-fill"></i>Autore/i</th>
-                        <th>Editore</th>
+                        <th><i className="bi bi-house"></i>Editore</th>
                         <th><i class="bi bi-calendar-event"></i>Anno</th>
-                        <th><i class="bi bi-globe"></i>Lingua</th>
+                        <th><i class="bi bi-translate"></i>Lingua</th>
                     </tr>
                 </thead>
                 <tbody>
