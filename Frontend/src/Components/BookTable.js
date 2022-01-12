@@ -58,15 +58,35 @@ export default class BookTable extends React.Component  {
                     {
                         this.state.data.map((libro) => (
                             <tr>
-                            <td>{libro.Titolo}</td>
-                            <td>{libro.Nome} {libro.Cognome}</td>
-                            <td>{libro.Editore}</td>
-                            <td>{libro.AnnoPubblicazione}</td>
-                            <td>{libro.Lingua}</td>
-                        </tr>
+                                <td>{libro.Titolo}</td>
+                                <td>{libro.Nome} {libro.Cognome}</td>
+                                <td>{libro.Editore}</td>
+                                <td>{libro.AnnoPubblicazione}</td>
+                                <td>{libro.Lingua}</td>
+                            </tr>
                         ))
                     }
-
+                            <tr>
+                                <td>xd</td>
+                                <td>xdd</td>
+                                <td>lol</td>
+                                <td>lmao</td>
+                                <td>fff</td>
+                            </tr>
+                            <tr>
+                                <td>xd</td>
+                                <td>xdd</td>
+                                <td>lol</td>
+                                <td>lmao</td>
+                                <td>fff</td>
+                            </tr>
+                            <tr>
+                                <td>xd</td>
+                                <td>xdd</td>
+                                <td>lol</td>
+                                <td>lmao</td>
+                                <td>fff</td>
+                            </tr>
                 </tbody>
             </table>
         </div>
