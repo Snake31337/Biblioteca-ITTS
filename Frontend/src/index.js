@@ -17,6 +17,8 @@ import SearchPage from './Components/SearchPage'
 import UserManagement from './Components/UserManagement'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SideNavBar from './Components/SideNavBar';
+import UserForm from './Components/UserForm';
 
 
 
@@ -24,15 +26,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}> </Route>
-        <Route path="/usermanagement" element={<UserManagement />}> </Route>
+        <Route path="/" element={<Home />}> 
+          <Route path="/usermanagement" element={<UserForm />}></Route>
+        </Route>
+        
         <Route path="/search/:nome" element={<SearchPage />}> </Route>
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
 );
-
-//<Route path="/users" element={<UserManagement />}></Route>
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

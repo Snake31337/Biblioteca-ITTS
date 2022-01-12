@@ -3,7 +3,8 @@ import NavBar from './Navbar';
 import SearchBar from './SearchBar';
 import BookTable from './BookTable';
 import SideNavBar from './SideNavBar';
-
+import UserForm from './UserForm';
+import { Routes, Route } from 'react-router';
 
 
 function Home() {
@@ -25,7 +26,10 @@ function Home() {
                         </div>
                         
                         <div class="main-item bookTable-container">
-                            <BookTable />
+                            <Routes>
+                                <Route path="/" element={<BookTable />}> </Route>
+                                <Route path="usermanagement" element={<UserForm />}></Route>
+                            </Routes>  
                         </div>
                     </div>
                 </div>
