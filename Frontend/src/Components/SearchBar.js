@@ -1,25 +1,46 @@
 import React from "react";
 import '../CSS/SearchBar.scss';
 
-import {
+import
+{
     BrowserRouter as Router,
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 
-function SearchBar() {
-    return(
+class SearchBar extends React.Component
+{
+    constructor(props) 
+    {
+        super(props);
+        this.state =
+        {
+            data: "",
+        }
+    }
 
-        <div className="searchBar-container">
-            <div className="searchBar">
-                <input type="text" placeholder="Quale libro vuoi cercare?" className="searchInputBox"></input>
-                <button type="submit" className="searchButton">
-                    <Link to="/search" className="bi bi-search"></Link>
-                </button>
-            </div>
-        </div>  
-    );
+    handleSubmit(event)
+    {
+        event.preventDefault();
+
+        console.log(JSON.stringify(this.state));
+    }
+
+    render()
+    {
+        return (
+
+            <div className="searchBar-container">
+                <form onSubmit={this.handleSubmit}>
+                    <div className="searchBar">
+                        <input type="text" name="keyword" placeholder="Quale libro vuoi cercare?" className="searchInputBox"></input>
+                        <button type='submit' className="searchButton bi bi-search"></button>
+                    </div>
+                </form>
+            </div>  
+        );
+    }
 }
 
 /*
