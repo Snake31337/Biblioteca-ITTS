@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import "../CSS/UserForm.scss"
+
 class UserForm extends React.Component{
     constructor(props){
         super(props);
@@ -45,18 +47,18 @@ class UserForm extends React.Component{
 
     render(){
         return (
-            <div>
-                <div>
+<div>
+                <div className='title'>
                 Aggiungi un utente
                 </div>
                 <div className="form-container">
-                    <form onSubmit={this.handleSubmit}>
+                    <form className='fields-container' onSubmit={this.handleSubmit}>
                     <label>
-                        Codice Fiscale:
+                        Codice Fiscale: 
                         <input name="CodiceFiscale" type="text" value={this.state.CodiceFiscale} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
-                        Nome:
+                        Nome: 
                         <input name="Nome" type="text" value={this.state.Nome} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
@@ -75,7 +77,7 @@ class UserForm extends React.Component{
                         Numero Tessera:
                         <input name="NumeroTessera" type="number" value={this.state.NumeroTessera} onChange={this.handleInputChange}></input>
                     </label>
-                    <input type='submit'/>
+                    <input className='submitButton' type='submit'/>
                     </form>
                 </div>
             </div>

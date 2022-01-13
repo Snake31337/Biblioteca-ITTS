@@ -1,0 +1,54 @@
+@import './ColorScheme.scss';
+
+.title{
+    color: $primary_1;
+    font-size: 1.8em;
+
+    margin-bottom: 20px;
+}
+
+.fields-container{
+    margin-left: 45px;
+    margin-right: 45px;
+
+    padding: 10px;
+}
+
+.fields-container label{
+    display: block;
+    
+}
+
+.fields-container input{
+    display: block;
+    padding: 2px;
+    border-radius: 4px;
+    
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #ccc;
+    
+    resize: vertical;
+
+
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: 12px;
+}
+
+.submitButton {
+    
+    background-color: $primary_1;
+    color: white;
+    float: right;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;   
+
+    transition: 0.1s;
+}
+
+.submitButton:hover{
+    background-color: $primary_3;
+
+}
