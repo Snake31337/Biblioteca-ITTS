@@ -6,37 +6,62 @@ export default class BookTable extends React.Component
     constructor(props)
     {
         super(props);
-  
-        this.state =
-        {
-          data : []
-        };
+        this.state = { keyword: null, data: [] };
     }
 
-    componentWillMount()
+    componentDidUpdate()
     {
-        this.renderMyData();
-    }
-
-    renderMyData()
-    {
-        fetch('http://localhost:8080/',
+        console.log("crepo");
+        if(this.props.keyword == null)
         {
-            method: 'POST',
-            body: JSON.stringify
-            ({
-                type: 'searchBook',
-                keyword: this.props.keyword,
+            fetch('http://localhost:8080/',
+            {
+                method: 'POST',
+                body: JSON.stringify
+                ({
+                    type: 'listBooks',
+                })
             })
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            this.setState({ data : responseJson })
-        })
-        .then((response) => {console.log(response.json())})
-        .catch((error) => {
-            console.error(error);
-        });
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ data : responseJson })
+            })
+            .then((response) => {
+                console.log(response.json())
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+        }
+        else
+        {
+            console.log("entro");
+            fetch('http://localhost:8080/',
+            {
+                method: 'POST',
+                body: JSON.stringify
+                ({
+                    type: 'searchBook',
+                    keyword: this.props.keyword,
+                })
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ data : responseJson })
+            })
+            .then((response) => {
+                console.log(response.json())
+            })
+            .catch((error) => {
+                console.error(error);
+            }); 
+        }
+        console.log(this.state.data);
+    }
+
+    componentDidMount()
+    {
+        this.componentDidUpdate();
     }
     
     render()
@@ -54,22 +79,18 @@ export default class BookTable extends React.Component
                         </tr>
                     </thead>
                     <tbody>
-                        {//console.log(this.state.data[0].CodiceLibro)
-                        console.log(this.state.data)
-                        }
-
                         {
-                            this.state.data.map((libro) => (
+                            this.state.data.map((decodedData) => (
                                 <tr>
-                                <td>{libro.Titolo}</td>
-                                <td>{libro.Nome} {libro.Cognome}</td>
-                                <td>{libro.Editore}</td>
-                                <td>{libro.AnnoPubblicazione}</td>
-                                <td>{libro.Lingua}</td>
+                                <td hidden>{decodedData.CodiceLibro}</td>
+                                <td>{decodedData.Titolo}</td>
+                                <td>{decodedData.Nome} {decodedData.Cognome}</td>
+                                <td>{decodedData.Editore}</td>
+                                <td>{decodedData.AnnoPubblicazione}</td>
+                                <td>{decodedData.Lingua}</td>
                             </tr>
                             ))
                         }
-
                     </tbody>
                 </table>
             </div>

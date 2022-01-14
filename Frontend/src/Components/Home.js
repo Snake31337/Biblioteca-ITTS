@@ -10,15 +10,13 @@ class Home extends React.Component
     constructor(props) 
     {
         super(props);
-        this.state =
-        {
-            keyword: "",
-        };
+        this.state = { keyword: null };
     }
 
-    updateKeyword(updatedKeyword)
+    updateKeyword = (newData) =>
     {
-        this.state.keyword = updatedKeyword;
+        this.setState({"keyword": newData});
+        console.log(newData);
     }
 
     render()
@@ -74,6 +72,5 @@ class Home extends React.Component
         )
     }   
 }
-
 
 export default Home;
