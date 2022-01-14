@@ -4,7 +4,6 @@ import './index.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Home from './Components/Home'
-import SearchPage from './Components/SearchPage'
 import reportWebVitals from './reportWebVitals';
 import UserForm from './Components/UserForm';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -15,8 +14,6 @@ ReactDOM.render(
         <Route path="/" element={<Home />}> 
           <Route path="/usermanagement" element={<UserForm />}></Route>
         </Route>
-        
-        <Route path="/search/:nome" element={<SearchPage />}> </Route>
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
