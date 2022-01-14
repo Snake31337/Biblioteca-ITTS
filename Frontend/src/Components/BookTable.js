@@ -11,7 +11,6 @@ export default class BookTable extends React.Component
 
     componentDidUpdate()
     {
-        console.log("crepo");
         if(this.props.keyword == null)
         {
             fetch('http://localhost:8080/',
@@ -35,7 +34,6 @@ export default class BookTable extends React.Component
         }
         else
         {
-            console.log("entro");
             fetch('http://localhost:8080/',
             {
                 method: 'POST',
@@ -56,7 +54,6 @@ export default class BookTable extends React.Component
                 console.error(error);
             }); 
         }
-        console.log(this.state.data);
     }
 
     componentDidMount()
