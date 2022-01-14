@@ -16,8 +16,10 @@
     color: white;
     padding: 10px;
     margin-bottom: 5px;
+    border-bottom: 5px solid $secondary_1;
     border-radius: 0px 10px 10px 0;
     text-decoration: none;
+    transition: 0.5s;
 
     &:hover {
         width: 100%;
