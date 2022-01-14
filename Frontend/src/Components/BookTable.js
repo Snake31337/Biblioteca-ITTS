@@ -1,4 +1,4 @@
-import '../CSS/BookTable.scss';
+import '../CSS/Table.scss';
 import React, { Component } from 'react';
 
 export default class BookTable extends React.Component
