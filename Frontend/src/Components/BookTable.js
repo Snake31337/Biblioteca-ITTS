@@ -1,10 +1,6 @@
 import '../CSS/Table.scss';
-<<<<<<< HEAD
 import React, { Component } from 'react';
 import FunctionButtons from './FunctionButtons';
-=======
-import React from 'react';
->>>>>>> acacb9ba9d25e49863bfd0db2a8cdfd28ab56fd4
 
 export default class BookTable extends React.Component
 {
