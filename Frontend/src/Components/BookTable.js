@@ -1,5 +1,5 @@
 import '../CSS/Table.scss';
-import React, { Component } from 'react';
+import React from 'react';
 
 export default class BookTable extends React.Component
 {
@@ -9,7 +9,7 @@ export default class BookTable extends React.Component
         this.state = { keyword: null, data: [] };
     }
 
-    componentDidUpdate()
+    fetchRemoteData()
     {
         if(this.props.keyword == null)
         {
@@ -53,12 +53,17 @@ export default class BookTable extends React.Component
             .catch((error) => {
                 console.error(error);
             }); 
-        }
+        }    
+    }
+
+    componentDidUpdate()
+    {
+        this.fetchRemoteData();
     }
 
     componentDidMount()
     {
-        this.componentDidUpdate();
+        this.fetchRemoteData();
     }
     
     render()

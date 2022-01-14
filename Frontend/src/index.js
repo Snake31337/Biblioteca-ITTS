@@ -3,25 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import App from './App';
-import NavBar from './Components/Navbar';
 import Home from './Components/Home'
-import SearchBar from './Components/SearchBar'
-import BookTable from './Components/BookTable';
-import UserWidget from './Components/UserWidget';
-import SubNavBar from './Components/SubNavBar';
-import LanguageSelect from './Components/LanguageSelect';
-import AccountButton from './Components/AccountButton';
-import UserTable from './Components/UserTable'
 import SearchPage from './Components/SearchPage'
-import UserManagement from './Components/UserManagement'
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SideNavBar from './Components/SideNavBar';
 import UserForm from './Components/UserForm';
-
-
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
