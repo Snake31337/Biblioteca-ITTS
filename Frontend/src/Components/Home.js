@@ -3,7 +3,7 @@ import NavBar from './Navbar';
 import SearchBar from './SearchBar';
 import BookTable from './BookTable';
 import SideNavBar from './SideNavBar';
-import React, { Component } from 'react';
+import React from 'react';
 
 class Home extends React.Component
 {

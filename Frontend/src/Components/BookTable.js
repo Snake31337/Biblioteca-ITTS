@@ -1,6 +1,10 @@
 import '../CSS/Table.scss';
+<<<<<<< HEAD
 import React, { Component } from 'react';
 import FunctionButtons from './FunctionButtons';
+=======
+import React from 'react';
+>>>>>>> acacb9ba9d25e49863bfd0db2a8cdfd28ab56fd4
 
 export default class BookTable extends React.Component
 {
@@ -13,7 +17,7 @@ export default class BookTable extends React.Component
         this.MouseLeave = this.MouseLeave.bind(this);
     }
 
-    componentDidUpdate()
+    fetchRemoteData()
     {
         if(this.props.keyword == null)
         {
@@ -57,12 +61,17 @@ export default class BookTable extends React.Component
             .catch((error) => {
                 console.error(error);
             }); 
-        }
+        }    
+    }
+
+    componentDidUpdate()
+    {
+        this.fetchRemoteData();
     }
 
     componentDidMount()
     {
-        this.componentDidUpdate();
+        this.fetchRemoteData();
     }
 
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)

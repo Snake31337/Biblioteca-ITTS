@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-
+import React from 'react';
 import "../CSS/UserForm.scss"
 
 class UserForm extends React.Component{

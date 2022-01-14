@@ -1,20 +1,12 @@
 import React from "react";
 import '../CSS/SearchBar.scss';
 
-import
-{
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
-
 class SearchBar extends React.Component
 {
     constructor(props) 
     {
         super(props);
-        //this.state = { };
+        this.state = { keyword: "" };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
