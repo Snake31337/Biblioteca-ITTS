@@ -1,12 +1,16 @@
 import '../CSS/Table.scss';
 import React, { Component } from 'react';
+import FunctionButtons from './FunctionButtons';
 
 export default class BookTable extends React.Component
 {
     constructor(props)
     {
         super(props);
-        this.state = { keyword: null, data: [] };
+        this.state = { keyword: null, data: [], isMouseInside: false };
+
+        this.MouseEnter = this.MouseEnter.bind(this);
+        this.MouseLeave = this.MouseLeave.bind(this);
     }
 
     componentDidUpdate()
@@ -60,6 +64,16 @@ export default class BookTable extends React.Component
     {
         this.componentDidUpdate();
     }
+
+    // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
+    MouseEnter(event) {  //check if user mouse is on table row
+        this.setState({ isMouseInside: true });
+    }
+
+    MouseLeave(event) {  //check if user mouse is outside of table row
+        this.setState({ isMouseInside: false });
+    }
+
     
     render()
     {
@@ -73,6 +87,7 @@ export default class BookTable extends React.Component
                             <th><i className="bi bi-house"></i>Editore</th>
                             <th><i class="bi bi-calendar-event"></i>Anno</th>
                             <th><i class="bi bi-translate"></i>Lingua</th>
+                            <th>Azione</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,6 +103,16 @@ export default class BookTable extends React.Component
                             </tr>
                             ))
                         }
+                        <tr onMouseEnter={this.MouseEnter} onMouseLeave={this.MouseLeave}>
+                                <td>xd</td>
+                                <td>xdd</td>
+                                <td>lol</td>
+                                <td>lmao</td>
+                                <td>fff</td>
+                                <td className="functionButtons-cell">
+                                    {this.state.isMouseInside ? <FunctionButtons/> : null}
+                                </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
