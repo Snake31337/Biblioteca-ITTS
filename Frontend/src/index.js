@@ -5,15 +5,14 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import Home from './Components/Home'
 import reportWebVitals from './reportWebVitals';
-import UserForm from './Components/UserForm';
+import UserManagement from './Components/UserManagement';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}> 
-          <Route path="/usermanagement" element={<UserForm />}></Route>
-        </Route>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/usermanagement" element={<UserManagement />}></Route>
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
