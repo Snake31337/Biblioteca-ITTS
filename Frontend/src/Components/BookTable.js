@@ -5,8 +5,7 @@ import { Loader } from 'semantic-ui-react'
 
 const styleLink = document.createElement("link");
 styleLink.rel = "stylesheet";
-styleLink.href = 
-"https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
+styleLink.href = "https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
 document.head.appendChild(styleLink);
 
 export default class BookTable extends React.Component
@@ -14,7 +13,7 @@ export default class BookTable extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = { keyword: null, data: [], isMouseInside: false };
+        this.state = { keyword: null, data: [], isMouseInside: [false, '']};
 
         this.MouseEnter = this.MouseEnter.bind(this);
         this.MouseLeave = this.MouseLeave.bind(this);
@@ -24,7 +23,7 @@ export default class BookTable extends React.Component
     {
         if(this.props.keyword == null)
         {
-            fetch('http://localhost:8080/',
+            fetch('http://detommasotommaso.altervista.org/',
             {
                 method: 'POST',
                 body: JSON.stringify
@@ -45,7 +44,7 @@ export default class BookTable extends React.Component
         }
         else
         {
-            fetch('http://localhost:8080/',
+            fetch('http://detommasotommaso.altervista.org/',
             {
                 method: 'POST',
                 body: JSON.stringify
@@ -78,18 +77,28 @@ export default class BookTable extends React.Component
     }
 
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
-    MouseEnter(event) {  //check if user mouse is on table row
-        this.setState({ isMouseInside: true });
+    MouseEnter(event, key) {  //check if user mouse is on table row
+        event.preventDefault();
+        this.setState({ isMouseInside: [true, key] });
     }
 
     MouseLeave(event) {  //check if user mouse is outside of table row
-        this.setState({ isMouseInside: false });
+        event.preventDefault();
+       this.setState({ isMouseInside: [false, ''] });
+    }
+
+    CheckMouseState(key) {
+        if(this.state.isMouseInside[0] && this.state.isMouseInside[1] === key) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     
     render()
     {
-        if(this.state.data == null || this.state.data.length == 0)
+        if(this.state.data == null || this.state.data.length === 0)
         {
             return (
                 <div className="table-container">
@@ -119,7 +128,7 @@ export default class BookTable extends React.Component
                         <tbody>
                             {
                                 this.state.data.map((decodedData) => (
-                                    <tr onMouseEnter={this.MouseEnter} onMouseLeave={this.MouseLeave}>
+                                    <tr key={decodedData.CodiceLibro} onMouseEnter={(e) => this.MouseEnter(e, decodedData.CodiceLibro)} onMouseLeave={(e) => this.MouseLeave(e)}>
                                         <td hidden>{decodedData.CodiceLibro}</td>
                                         <td>{decodedData.Titolo}</td>
                                         <td>{decodedData.Nome} {decodedData.Cognome}</td>
@@ -127,7 +136,7 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            {this.state.isMouseInside ? <FunctionButtons/> : null}
+                                            {this.CheckMouseState(decodedData.CodiceLibro) ? <FunctionButtons/> : null}
                                         </td>
                                     </tr>
                                 ))
