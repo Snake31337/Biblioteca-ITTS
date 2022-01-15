@@ -22,7 +22,7 @@ export default class BookTable extends React.Component
 
     MouseLeave(event) {  //check if user mouse is outside of table row
         event.preventDefault();
-       this.setState({ isMouseInside: [false, ''] });
+        this.setState({ isMouseInside: [false, ''] });
     }
 
     CheckMouseState(key) {
@@ -53,14 +53,14 @@ export default class BookTable extends React.Component
                         <tbody>
                             {
                                 this.props.data.map((decodedData) => (
-                                    <tr key={decodedData.CodiceLibro} onMouseEnter={this.MouseEnter} onMouseLeave={this.MouseLeave}>
+                                    <tr key={decodedData.CodiceLibro} onMouseEnter={(e) => this.MouseEnter(e, decodedData.CodiceLibro)} onMouseLeave={(e) => this.MouseLeave(e)}>
                                         <td>{decodedData.Titolo}</td>
                                         <td>{decodedData.Nome} {decodedData.Cognome}</td>
                                         <td>{decodedData.Editore}</td>
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            {this.state.isMouseInside ? <FunctionButtons/> : null}
+                                            {this.CheckMouseState(decodedData.CodiceLibro) ? <FunctionButtons/> : null}
                                         </td>
                                     </tr>
                                 ))
