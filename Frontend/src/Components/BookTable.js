@@ -1,6 +1,13 @@
 import '../CSS/Table.scss';
-import React, { Component } from 'react';
+import React from 'react';
 import FunctionButtons from './FunctionButtons';
+import { Loader } from 'semantic-ui-react'
+
+const styleLink = document.createElement("link");
+styleLink.rel = "stylesheet";
+styleLink.href = 
+"https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css";
+document.head.appendChild(styleLink);
 
 export default class BookTable extends React.Component
 {
@@ -82,45 +89,53 @@ export default class BookTable extends React.Component
     
     render()
     {
-        return (
-            <div className="table-container">
-                <table className="book-table">
-                    <thead>
-                        <tr className='first-row'>
-                            <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
-                            <th><i className="bi bi-people-fill"></i>Autore/i</th>
-                            <th><i className="bi bi-house"></i>Editore</th>
-                            <th><i className="bi bi-calendar-event"></i>Anno</th>
-                            <th><i className="bi bi-translate"></i>Lingua</th>
-                            <th>Azione</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            this.state.data.map((decodedData) => (
-                                <tr>
-                                <td hidden>{decodedData.CodiceLibro}</td>
-                                <td>{decodedData.Titolo}</td>
-                                <td>{decodedData.Nome} {decodedData.Cognome}</td>
-                                <td>{decodedData.Editore}</td>
-                                <td>{decodedData.AnnoPubblicazione}</td>
-                                <td>{decodedData.Lingua}</td>
+        if(this.state.data == null || this.state.data.length == 0)
+        {
+            return (
+                <div className="table-container">
+                    <div className="book-table">
+                        <br></br>
+                            <Loader active indeterminate inline='centered'>Fetching data</Loader>
+                        <br></br>
+                    </div>
+                </div>
+            );
+        }
+        else
+        {
+            return (
+                <div className="table-container">
+                    <table className="book-table">
+                        <thead>
+                            <tr className='first-row'>
+                                <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
+                                <th><i className="bi bi-people-fill"></i>Autore/i</th>
+                                <th><i className="bi bi-house"></i>Editore</th>
+                                <th><i className="bi bi-calendar-event"></i>Anno</th>
+                                <th><i className="bi bi-translate"></i>Lingua</th>
+                                <th>Azione</th>
                             </tr>
-                            ))
-                        }
-                        <tr onMouseEnter={this.MouseEnter} onMouseLeave={this.MouseLeave}>
-                                <td>xd</td>
-                                <td>xdd</td>
-                                <td>lol</td>
-                                <td>lmao</td>
-                                <td>fff</td>
-                                <td className="functionButtons-cell">
-                                    {this.state.isMouseInside ? <FunctionButtons/> : null}
-                                </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.data.map((decodedData) => (
+                                    <tr onMouseEnter={this.MouseEnter} onMouseLeave={this.MouseLeave}>
+                                        <td hidden>{decodedData.CodiceLibro}</td>
+                                        <td>{decodedData.Titolo}</td>
+                                        <td>{decodedData.Nome} {decodedData.Cognome}</td>
+                                        <td>{decodedData.Editore}</td>
+                                        <td>{decodedData.AnnoPubblicazione}</td>
+                                        <td>{decodedData.Lingua}</td>
+                                        <td className="functionButtons-cell">
+                                            {this.state.isMouseInside ? <FunctionButtons/> : null}
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
     }
 }
