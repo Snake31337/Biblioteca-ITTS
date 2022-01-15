@@ -38,7 +38,7 @@ class Home extends React.Component
                                 <SearchBar updateKeyword={this.updateKeyword} />
                             </div>
 
-                            <div class="main-item bookTable-container">
+                            <div className="main-item bookTable-container">
                                 <BookTable keyword={this.state.keyword} />
                             </div>
                         </div>

@@ -62,7 +62,7 @@ export default class BookTable extends React.Component
 
     componentDidUpdate()
     {
-        this.fetchRemoteData();
+        //this.fetchRemoteData();
     }
 
     componentDidMount()
@@ -90,8 +90,8 @@ export default class BookTable extends React.Component
                             <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
                             <th><i className="bi bi-people-fill"></i>Autore/i</th>
                             <th><i className="bi bi-house"></i>Editore</th>
-                            <th><i class="bi bi-calendar-event"></i>Anno</th>
-                            <th><i class="bi bi-translate"></i>Lingua</th>
+                            <th><i className="bi bi-calendar-event"></i>Anno</th>
+                            <th><i className="bi bi-translate"></i>Lingua</th>
                             <th>Azione</th>
                         </tr>
                     </thead>
