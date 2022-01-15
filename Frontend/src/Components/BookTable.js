@@ -8,19 +8,29 @@ export default class BookTable extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = { isMouseInside: false };
+        this.state = { isMouseInside: [false, ''] };
 
         this.MouseEnter = this.MouseEnter.bind(this);
         this.MouseLeave = this.MouseLeave.bind(this);
     }
 
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
-    MouseEnter(event) {  //check if user mouse is on table row
-        this.setState({ isMouseInside: true });
+    MouseEnter(event, key) {  //check if user mouse is on table row
+        event.preventDefault();
+        this.setState({ isMouseInside: [true, key] });
     }
 
     MouseLeave(event) {  //check if user mouse is outside of table row
-        this.setState({ isMouseInside: false });
+        event.preventDefault();
+       this.setState({ isMouseInside: [false, ''] });
+    }
+
+    CheckMouseState(key) {
+        if(this.state.isMouseInside[0] && this.state.isMouseInside[1] === key) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     render()
