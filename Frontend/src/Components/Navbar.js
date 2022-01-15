@@ -19,7 +19,6 @@ function NavBar() {
             
             <div className="nav-right nav-items"> 
                 <button>Tema Scuro</button>
-                <AccountButton />
             </div>
         </nav>
     );
