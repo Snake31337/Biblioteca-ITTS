@@ -14,6 +14,8 @@ class Home extends React.Component
     {
         super(props);
         this.state = { databaseData: null };
+
+        this.fetchRemoteData = this.fetchRemoteData.bind(this);
     }
 
     fetchRemoteData(searchKey)
