@@ -5,9 +5,9 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 
 import reportWebVitals from './reportWebVitals';
-import UserManagement from './Components/UserManagement';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {hyperlinks} from './Components/Pages'
+import NotFound from './Components/NotFound';
 
 ReactDOM.render(
   <BrowserRouter>
@@ -16,9 +16,7 @@ ReactDOM.render(
           <Route path={pages.link} element={pages.class}></Route>
         ))
         }
-        {/* <Route path="/" element={<Home />}></Route>
-        <Route path="/usermanagement" element={<UserManagement />}></Route>
-        <Route path="/borrow" element={<Borrow />}></Route> */}
+        <Route path='*' element={<NotFound />} />
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
