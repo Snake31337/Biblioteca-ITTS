@@ -87,12 +87,12 @@ export default class BookTable extends React.Component
                     <table className="book-table">
                         <thead>
                             <tr className='first-row'>
-                                <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
+                                <th><i className="bi bi-file-earmark-font"></i>Titolo</th>
                                 <th><i className="bi bi-people-fill"></i>Autore/i</th>
                                 <th><i className="bi bi-house"></i>Editore</th>
                                 <th><i className="bi bi-calendar-event"></i>Anno</th>
                                 <th><i className="bi bi-translate"></i>Lingua</th>
-                                <th className="functionButtons-column">Azione</th>
+                                <th className="functionButtons-column"></th>
                             </tr>
                         </thead>
                         <tbody>
