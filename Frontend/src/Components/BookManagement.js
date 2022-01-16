@@ -103,7 +103,7 @@ export default class BookManagement extends React.Component {
                         </button>
                           
                         <div className="main-item bookTable-container">
-                                <BookTable data={this.state.databaseData} />
+                                <BookTable fetchRemoteData={this.fetchRemoteData} data={this.state.databaseData} />
                         </div>
                     </div>
                 </div>
