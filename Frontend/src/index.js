@@ -3,16 +3,22 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import Home from './Components/Home'
+
 import reportWebVitals from './reportWebVitals';
 import UserManagement from './Components/UserManagement';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {hyperlinks} from './Components/Pages'
 
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        {hyperlinks.map((pages) => (
+          <Route path={pages.link} element={pages.class}></Route>
+        ))
+        }
+        {/* <Route path="/" element={<Home />}></Route>
         <Route path="/usermanagement" element={<UserManagement />}></Route>
+        <Route path="/borrow" element={<Borrow />}></Route> */}
       </Routes>
   </BrowserRouter>,
   document.getElementById('root')
