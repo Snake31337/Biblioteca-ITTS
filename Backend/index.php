@@ -145,7 +145,7 @@
         {
             if($requestData["type"] == "listBooks")
             {
-                $operation = $dbManager->SelectRowsRelationNN("Libro", "Autore", "Scrive", Array("Libro.*", "Autore.Nome", "Autore.Cognome"), "CodiceLibro", "CodiceAutore", "");
+                $operation = $dbManager->SelectRows("Libro", Array("*"), "");
                 if($operation["successful"])
                 {
                     $resultArray = Array();
@@ -165,8 +165,8 @@
                     $bookArgs = $requestData["bookArgs"];
                     $operation = $dbManager->InsertRow(
                         "Libro", 
-                        Array("Titolo", "Lingua", "Editore", "AnnoPubblicazione", "Categoria", "ISBN"),
-                        Array("'" . $bookArgs["Titolo"] . "'", "'" . $bookArgs["Lingua"] . "'", "'" . $bookArgs["Editore"] . "'", $bookArgs["AnnoPubblicazione"], "'" . $bookArgs["Categoria"] . "'", "'" . $bookArgs["ISBN"] . "'")
+                        Array("Titolo", "Lingua", "Autore", "Editore", "AnnoPubblicazione", "Categoria", "ISBN"),
+                        Array("'" . $bookArgs["Titolo"] . "'", "'" . $bookArgs["Lingua"] . "'", "'" . $bookArgs["Autore"] . "'", "'" . $bookArgs["Editore"] . "'", $bookArgs["AnnoPubblicazione"], "'" . $bookArgs["Categoria"] . "'", "'" . $bookArgs["ISBN"] . "'")
                     );
                     if($operation["successful"])
                     {
@@ -187,7 +187,7 @@
                 if(isset($requestData["keyword"]))
                 {
                     $keyword = $requestData["keyword"];
-                    $operation = $dbManager->SelectRowsRelationNN("Libro", "Autore", "Scrive", Array("Libro.*", "Autore.Nome", "Autore.Cognome"), "CodiceLibro", "CodiceAutore", "Libro.Titolo LIKE '%" . $keyword . "%'");
+                    $operation = $dbManager->SelectRows("Libro", Array("*"), "Libro.Titolo LIKE '%" . $keyword . "%'");
                     if($operation["successful"])
                     {
                         $resultArray = Array();
@@ -246,22 +246,14 @@
                 if(isset($requestData["id"]))
                 {
                     $id = $requestData["id"];
-                    $operation = $dbManager->DeleteRows("Scrive", "CodiceLibro = " . $id);
+                    $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
                     if($operation["successful"])
                     {
-                        $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
-                        if($operation["successful"])
-                        {
-                            respond(200, "Deleted successfully (" . $operation["response"] . ")");
-                        }
-                        else
-                        {
-                            respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
-                        }
+                        respond(200, "Deleted successfully (" . $operation["response"] . ")");
                     }
                     else
                     {
-                        respond(500, "Couldn't delete relation: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                        respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
                     }
                 }
                 else
