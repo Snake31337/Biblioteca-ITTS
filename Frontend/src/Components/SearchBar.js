@@ -35,7 +35,7 @@ class SearchBar extends React.Component
             <div className="searchBar-container">
                 <form onSubmit={this.handleSubmit}>
                     <div className="searchBar">
-                        <input type="text" name="keyword" placeholder="Quale libro vuoi cercare?" className="searchInputBox" onChange={this.handleInputChange}></input>
+                        <input type="text" name="keyword" placeholder={this.props.label} className="searchInputBox" onChange={this.handleInputChange}></input>
                         <button type='submit' className="searchButton bi bi-search"></button>
                     </div>
                 </form>
