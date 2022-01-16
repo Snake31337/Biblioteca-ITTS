@@ -5,7 +5,6 @@ import NavBar from './Navbar';
 import SearchBar from './SearchBar';
 import SideNavBar from './SideNavBar';
 import BookTable from './BookTable';
-import BookTableLoader from './BookTableLoader';
 import BookForm from './BookForm';
 
 import {currentIP} from './IPAddress'
@@ -101,7 +100,7 @@ class Home extends React.Component
                             <BookForm />
                                 
                             <div className="main-item bookTable-container">
-                                { this.state.databaseData == null ? <BookTableLoader /> : <BookTable data={this.state.databaseData} /> }
+                                <BookTable data={this.state.databaseData} />
                             </div>
                         </div>
                     </div>
