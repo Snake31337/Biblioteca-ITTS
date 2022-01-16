@@ -5,6 +5,7 @@ import {currentIP} from './IPAddress'
 import BookForm from './BookForm';
 
 import Modal from './Modal';
+import UserForm from './UserForm';
 
 // Bottoni per l'Editing e cancellazione
 export default class FunctionButtons extends React.Component
@@ -29,12 +30,19 @@ export default class FunctionButtons extends React.Component
         let text = "Sei sicuro di voler cancellare questo elemento?";
         if(window.confirm(text) === true)
         {
+            var methodType;
+            if(this.props.formType === "bookForm"){
+                methodType = "deleteBook";
+            } else if (this.props.formType === "userForm") {
+                methodType = "deleteUser";
+            }
+
             fetch(currentIP,
             {
                 method: 'POST',
                 body: JSON.stringify
                 ({
-                    type: 'deleteBook',
+                    type: methodType,
                     id: this.props.relativeTo,
                 })
             })
@@ -58,6 +66,18 @@ export default class FunctionButtons extends React.Component
 
         }
     }
+
+    RenderForm() {
+        console.log(this.props.formType);
+        switch(this.props.formType) {
+            case 'bookForm':
+                return <BookForm requestType="update" elementID={this.state.bookKey}/>;
+            case 'userForm':
+                return <UserForm />;
+            default:
+                return null;
+        }
+    }
     
     render()
     {
@@ -73,7 +93,7 @@ export default class FunctionButtons extends React.Component
                         </button>
 
                         <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
-                            <BookForm requestType="update" elementID={this.state.bookKey}/>
+                            {this.RenderForm()}
                         </Modal> 
                 </div>  
             );
