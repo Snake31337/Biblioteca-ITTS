@@ -15,9 +15,9 @@ export const hyperlinks =
         link: "/usermanagement",
         class: <UserManagement />
     },
-    /*{
+    {
         label: "Prestiti",
         link: "/borrow",
         class: <Borrow />
-    }*/
+    }
 ]
