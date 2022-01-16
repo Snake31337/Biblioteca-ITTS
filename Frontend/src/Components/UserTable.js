@@ -14,6 +14,7 @@ export default class UserTable extends React.Component {
           data : [],
           isMouseInside: [false, '']
         };
+        this.removeRow = this.removeRow.bind(this);
     }
     
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
@@ -33,6 +34,13 @@ export default class UserTable extends React.Component {
         } else {
             return false;
         }
+    }
+
+    removeRow(bookKey) {    // Questa funzione viene chiamata quando viene premuto il pulsante cancella riga in Functionbuttons
+
+        //this.setState({ showRow: [true, bookKey] });
+
+        this.props.fetchRemoteData();
     }
 
     render(){

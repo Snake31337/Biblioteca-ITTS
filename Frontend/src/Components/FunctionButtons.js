@@ -30,12 +30,19 @@ export default class FunctionButtons extends React.Component
         let text = "Sei sicuro di voler cancellare questo elemento?";
         if(window.confirm(text) === true)
         {
+            var methodType;
+            if(this.props.formType === "bookForm"){
+                methodType = "deleteBook";
+            } else if (this.props.formType === "userForm") {
+                methodType = "deleteUser";
+            }
+
             fetch(currentIP,
             {
                 method: 'POST',
                 body: JSON.stringify
                 ({
-                    type: 'deleteBook',
+                    type: methodType,
                     id: this.props.relativeTo,
                 })
             })
