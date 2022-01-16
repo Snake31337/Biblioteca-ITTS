@@ -21,6 +21,7 @@ export default class BookManagement extends React.Component {
         };
 
         this.fetchRemoteData = this.fetchRemoteData.bind(this);
+        this.handleOpenChange = this.handleOpenChange.bind(this);
     }
 
     fetchRemoteData(searchKey)
@@ -82,6 +83,12 @@ export default class BookManagement extends React.Component {
         this.fetchRemoteData();
     }
 
+    // Al submit del form si chiude la finestra popup
+    handleOpenChange() {
+        this.setState({open: false});
+        this.fetchRemoteData();
+    }
+
     render(){
     return (
         <div>
@@ -90,7 +97,7 @@ export default class BookManagement extends React.Component {
                         <h1 className="title">Libri</h1>
 
                         <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
-                            <BookForm />
+                            <BookForm handleOpenChange={this.handleOpenChange}/>
                         </Modal>
         
                         <div className="main-item searchBar-container">
