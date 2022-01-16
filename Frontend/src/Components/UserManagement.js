@@ -57,6 +57,7 @@ export default class UserManagement extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'searchUser',
+                    by: 'CodiceTessera',
                     keyword: searchKey,
                 })
             })
