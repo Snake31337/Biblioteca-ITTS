@@ -142,9 +142,9 @@ function respond($statusCode, $data)
         {   
             $whereArray = Array();
             foreach($data as $key => $value)
-                array_push($whereArray, "COLUMN_NAME = '" . $key . "'");
+                array_push($whereArray, "COLUMN_NAME = \"" . $key . "\"");
 
-            $whereCondition = "TABLE_NAME = '" . $tableName . "'";
+            $whereCondition = "TABLE_NAME = \"" . $tableName . "\"";
             $whereCondition .= " AND " . implode(" OR ", $whereArray);
             $operation = $this->Query($this->GetSelectRows("INFORMATION_SCHEMA.COLUMNS", Array("COLUMN_NAME", "DATA_TYPE"), $whereCondition));
             if($operation)
@@ -154,7 +154,7 @@ function respond($statusCode, $data)
                     $typesArray[$row[0]] = $row[1];
                 foreach($data as $key => $value)
                     if($typesArray[$key] == "varchar")
-                        $data[$key] = "'" . $data[$key] . "'";
+                        $data[$key] = "\"" . $data[$key] . "\"";
                 
                 return $data;
             }
