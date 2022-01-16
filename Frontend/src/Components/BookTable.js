@@ -7,10 +7,11 @@ export default class BookTable extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = { isMouseInside: [false, ''] };
+        this.state = { isMouseInside: [false, ''], showRow: [true,''] };
 
         this.MouseEnter = this.MouseEnter.bind(this);
         this.MouseLeave = this.MouseLeave.bind(this);
+        this.removeRow = this.removeRow.bind(this);
     }
 
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
@@ -30,6 +31,37 @@ export default class BookTable extends React.Component
         } else {
             return false;
         }
+    }
+
+    removeRow(bookKey) {    // Questa funzione viene chiamata quando viene premuto il pulsante cancella riga in Functionbuttons
+        console.log("removeRow function in booktable");
+
+        this.setState({ showRow: [true, bookKey] });
+
+        this.props.fetchRemoteData();
+
+
+    }
+
+    CheckRowState() {
+        
+    }
+
+    PrintTable() {
+        const TableData = this.props.data.map((decodedData) => (
+            <tr key={decodedData.CodiceLibro} onMouseEnter={(e) => this.MouseEnter(e, decodedData.CodiceLibro)} onMouseLeave={(e) => this.MouseLeave(e)}>
+                <td>{decodedData.Titolo}</td>
+                <td>{decodedData.Nome} {decodedData.Cognome}</td>
+                <td>{decodedData.Editore}</td>
+                <td>{decodedData.AnnoPubblicazione}</td>
+                <td>{decodedData.Lingua}</td>
+                <td className="functionButtons-cell">
+                    <FunctionButtons removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
+                </td>
+            </tr>
+        ))
+
+        return TableData;
     }
 
     render()
@@ -59,10 +91,11 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            <FunctionButtons relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
+                                            <FunctionButtons removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                                         </td>
                                     </tr>
                                 ))
+                                //this.PrintTable()
                             }
                         </tbody>
                     </table>
