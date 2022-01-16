@@ -48,6 +48,7 @@ export default class BookManagement extends React.Component {
             .catch((error) => {
                 console.error(error);
             });
+
         }
         else
         {
@@ -101,13 +102,13 @@ export default class BookManagement extends React.Component {
                         </Modal>
         
                         <div className="main-item searchBar-container">
-                                <SearchBar updateKeyword={this.updateKeyword} />
+                            <SearchBar updateKeyword={this.updateKeyword} />
                         </div>
 
-                        <button className='button rounded' onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
+                        <div className="button rounded" onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
                             <div className="label">Aggiungi Libro</div>
-                            <i class="bi bi-plus-circle icon"></i>
-                        </button>
+                            <i className="bi bi-plus-circle icon"></i>
+                        </div>
                           
                         <div className="main-item bookTable-container">
                                 <BookTable fetchRemoteData={this.fetchRemoteData} data={this.state.databaseData} />
