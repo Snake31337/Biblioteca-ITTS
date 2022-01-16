@@ -22,67 +22,6 @@ class Home extends React.Component
     {
         super(props);
         this.state = { databaseData: null };
-
-        this.fetchRemoteData = this.fetchRemoteData.bind(this);
-    }
-
-    fetchRemoteData(searchKey)
-    {
-        this.setState({ databaseData: null });
-
-        if(searchKey == null)
-        {
-            fetch(currentIP,
-            {
-                method: 'POST',
-                body: JSON.stringify
-                ({
-                    type: 'listBooks',
-                })
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ databaseData: responseJson});
-            })
-            .then((response) => {
-                console.log(response.json())
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-        }
-        else
-        {
-            fetch(currentIP,
-            {
-                method: 'POST',
-                body: JSON.stringify
-                ({
-                    type: 'searchBook',
-                    keyword: searchKey,
-                })
-            })
-            .then((response) => response.json())
-            .then((responseJson) => {
-                this.setState({ databaseData: responseJson});
-            })
-            .then((response) => {
-                console.log(response.json())
-            })
-            .catch((error) => {
-                console.error(error);
-            }); 
-        }
-    }
-
-    updateKeyword = (keyword) =>
-    {
-        this.fetchRemoteData(keyword);
-    }
-
-    componentDidMount()
-    {
-        this.fetchRemoteData();
     }
 
     render()
