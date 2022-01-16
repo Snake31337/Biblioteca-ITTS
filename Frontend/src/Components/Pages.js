@@ -12,12 +12,12 @@ export const hyperlinks =
     },
     {
         label: "Gestione utenti",
-        link: "/usermanagement",
+        link: "/gestioneutenti",
         class: <UserManagement />
     },
     {
         label: "Prestiti",
-        link: "/borrow",
+        link: "/prestiti",
         class: <Borrow />
     }
 ]
