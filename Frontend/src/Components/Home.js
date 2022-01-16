@@ -1,12 +1,15 @@
+import React from 'react';
+
 import '../CSS/Home.scss';
 import NavBar from './Navbar';
 import SearchBar from './SearchBar';
 import SideNavBar from './SideNavBar';
 import BookTable from './BookTable';
 import BookTableLoader from './BookTableLoader';
-import React from 'react';
+import BookForm from './BookForm';
 
 import {currentIP} from './IPAddress'
+
 
 class Home extends React.Component
 {
@@ -95,7 +98,8 @@ class Home extends React.Component
                             <div className="main-item searchBar-container">
                                 <SearchBar updateKeyword={this.updateKeyword} />
                             </div>
-
+                            <BookForm />
+                                
                             <div className="main-item bookTable-container">
                                 { this.state.databaseData == null ? <BookTableLoader /> : <BookTable data={this.state.databaseData} /> }
                             </div>
