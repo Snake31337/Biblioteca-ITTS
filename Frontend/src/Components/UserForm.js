@@ -1,6 +1,8 @@
 import React from 'react';
 import "../CSS/UserForm.scss"
 
+import {currentIP} from './IPAddress'
+
 class UserForm extends React.Component{
     constructor(props){
         super(props);
@@ -26,7 +28,7 @@ class UserForm extends React.Component{
 
         console.log(JSON.stringify(this.state));
 
-        fetch("http://192.168.105.77:8080/", {
+        fetch(currentIP, {
             method: "POST",
             
             body: JSON.stringify({

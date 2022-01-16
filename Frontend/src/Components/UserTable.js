@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../CSS/Table.scss';
 
+import {currentIP} from './IPAddress'
+
 export default class UserTable extends React.Component {
     constructor(props) {
         super(props);
@@ -15,7 +17,7 @@ export default class UserTable extends React.Component {
     }
 
     renderMyData(){
-        fetch('http://192.168.105.77:8080/', {
+        fetch(currentIP, {
             method: 'POST',
             body: JSON.stringify({
           type: 'listUsers',

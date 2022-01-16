@@ -6,6 +6,8 @@ import BookTable from './BookTable';
 import BookTableLoader from './BookTableLoader';
 import React from 'react';
 
+import {currentIP} from './IPAddress'
+
 class Home extends React.Component
 {
     constructor(props) 
@@ -20,7 +22,7 @@ class Home extends React.Component
 
         if(searchKey == null)
         {
-            fetch('http://localhost:8080/',
+            fetch(currentIP,
             {
                 method: 'POST',
                 body: JSON.stringify
@@ -41,7 +43,7 @@ class Home extends React.Component
         }
         else
         {
-            fetch('http://localhost:8080/',
+            fetch(currentIP,
             {
                 method: 'POST',
                 body: JSON.stringify
