@@ -11,7 +11,7 @@ export const hyperlinks =
         class: <BookManagement />
     },
     {
-        label: "User Management",
+        label: "Gestione utenti",
         link: "/usermanagement",
         class: <UserManagement />
     },

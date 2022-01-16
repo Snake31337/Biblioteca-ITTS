@@ -2,6 +2,9 @@ import '../CSS/FunctionButtons.scss';
 import React from 'react';
 
 import {currentIP} from './IPAddress'
+import BookForm from './BookForm';
+
+import Modal from './Modal';
 
 // Bottoni per l'Editing e cancellazione
 export default class FunctionButtons extends React.Component
@@ -9,7 +12,7 @@ export default class FunctionButtons extends React.Component
     constructor(props)
     {
         super(props);
-        this.state = { bookKey: this.props.relativeTo }
+        this.state = { bookKey: this.props.relativeTo, open: false }
 
         this.showForm = this.showForm.bind(this);
         this.deleteElement = this.deleteElement.bind(this);
@@ -62,12 +65,16 @@ export default class FunctionButtons extends React.Component
         {
             return (
                 <div className="FunctionButtons">
-                        <button type="button" className="functionButtons-button" onClick={this.showForm}>
+                        <button type="button" className="functionButtons-button" onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
                             <i className="functionButtons-icon bi bi-pen-fill"></i>
                         </button>
                         <button type="button" className="functionButtons-button" onClick={this.deleteElement}>
                             <i className="functionButtons-icon bi bi-x-lg"></i>
-                        </button> 
+                        </button>
+
+                        <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
+                            <BookForm requestType="update" elementID={this.state.bookKey}/>
+                        </Modal> 
                 </div>  
             );
         }

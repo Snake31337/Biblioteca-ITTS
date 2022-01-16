@@ -6,7 +6,6 @@
     color: white;
     padding: 16px;
     text-align: center;
-    align-items: center;
     text-decoration: none;
     display: flex;
     font-size: 16px;
@@ -29,8 +28,7 @@
     }
 
     .icon{
-      align-items: center;
       font-size: larger;
-      margin-left: px;
+      height: auto;
     }
 }
