@@ -400,7 +400,7 @@
                 if(isset($requestData["id"]))
                 {
                     $id = $requestData["id"];
-                    $operation = $dbManager->DeleteRows("Utente", "CodiceFiscale = " . $id);
+                    $operation = $dbManager->DeleteRows("Utente", "CodiceFiscale = '" . $id ."'");
                     if($operation)
                     {
                         respond(200, "Deleted successfully (" . $dbManager->lastResult . ")");
