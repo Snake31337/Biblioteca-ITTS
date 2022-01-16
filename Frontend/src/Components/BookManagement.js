@@ -87,10 +87,7 @@ export default class BookManagement extends React.Component {
             <div className="grid-item main">
                 <div className='main-wrapper'>
                         <h1 className="title">Libri</h1>
-                        <button className='button rounded' onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
-                            <div className="label">Aggiungi Libro</div>
-                            <i class="bi bi-plus-circle icon"></i>
-                        </button>
+
                         <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
                             <BookForm />
                         </Modal>
@@ -98,7 +95,12 @@ export default class BookManagement extends React.Component {
                         <div className="main-item searchBar-container">
                                 <SearchBar updateKeyword={this.updateKeyword} />
                         </div>
-                                
+
+                        <button className='button rounded' onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
+                            <div className="label">Aggiungi Libro</div>
+                            <i class="bi bi-plus-circle icon"></i>
+                        </button>
+                          
                         <div className="main-item bookTable-container">
                                 <BookTable data={this.state.databaseData} />
                         </div>
