@@ -8,14 +8,19 @@ import reportWebVitals from './reportWebVitals';
 import UserManagement from './Components/UserManagement';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {hyperlinks} from './Components/Pages'
+import Home from './Components/Home';
+
 
 ReactDOM.render(
   <BrowserRouter>
       <Routes>
-        {hyperlinks.map((pages) => (
-          <Route path={pages.link} element={pages.class}></Route>
-        ))
-        }
+        <Route path="/" element={<Home />}>
+          {hyperlinks.map((pages) => (
+            <Route path={pages.link} element={pages.class}></Route>
+          ))
+          }
+        </Route>
+        
         {/* <Route path="/" element={<Home />}></Route>
         <Route path="/usermanagement" element={<UserManagement />}></Route>
         <Route path="/borrow" element={<Borrow />}></Route> */}

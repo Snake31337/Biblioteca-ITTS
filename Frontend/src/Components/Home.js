@@ -9,6 +9,10 @@ import BookForm from './BookForm';
 import BookManagement from './BookManagement';
 
 import {currentIP} from './IPAddress'
+import { Routes, Route } from 'react-router';
+import {hyperlinks} from './Pages'
+import UserManagement from './UserManagement';
+
 
 
 class Home extends React.Component
@@ -95,9 +99,13 @@ class Home extends React.Component
                     </div>
                     <div className="grid-item main">
                         <div className="main-wrapper">
-                            <div className="main-item bookTable-container">
-                                <BookManagement />
-                            </div>
+                            <Routes>
+                                {hyperlinks.map((pages) => (
+                                    <Route path={pages.link} element={pages.class}></Route>
+                                ))
+                                }
+                            </Routes>
+                                
                         </div>
                     </div>
                     <div className="grid-item rigth-sidebar"></div>
