@@ -24,7 +24,7 @@ export default class FunctionButtons extends React.Component
     {
         console.log(this.props.relativeTo);
         let text = "Sei sicuro di voler cancellare questo elemento?";
-        if(window.confirm(text) == true)
+        if(window.confirm(text) === true)
         {
             fetch(currentIP,
             {
@@ -46,6 +46,8 @@ export default class FunctionButtons extends React.Component
                 console.error(error);
             });
 
+            this.props.removeRow(this.props.relativeTo); // Questo comando chiama la funzione removeRow del Booktable.js. Serve per ri-renderizzare la tabella e togliere quindi la riga eliminata
+
             //Inserire richiesta di delete qui dentro
         }
         else
@@ -63,10 +65,6 @@ export default class FunctionButtons extends React.Component
                         <button type="button" className="functionButtons-button" onClick={this.showForm}>
                             <i className="functionButtons-icon bi bi-pen-fill"></i>
                         </button>
-                        {/* Raga per qualche motivo se aggiungo una funzione al pulsante cancella si attiva solo se ci vai sopra la row 
-                            Ho capito, per qualche motivo è solo quando nella funzione ci metti le parentesi {deleteElement()}
-                            Ma come facciamo a passargli l'ID se così è buggato?
-                        */}
                         <button type="button" className="functionButtons-button" onClick={this.deleteElement}>
                             <i className="functionButtons-icon bi bi-x-lg"></i>
                         </button> 
