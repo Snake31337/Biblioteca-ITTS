@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 import SideNavBar from './SideNavBar';
 import BookTable from './BookTable';
 import BookForm from './BookForm';
+import BookManagement from './BookManagement';
 
 import {currentIP} from './IPAddress'
 
@@ -94,13 +95,8 @@ class Home extends React.Component
                     </div>
                     <div className="grid-item main">
                         <div className="main-wrapper">
-                            <div className="main-item searchBar-container">
-                                <SearchBar updateKeyword={this.updateKeyword} />
-                            </div>
-                            <BookForm />
-                                
                             <div className="main-item bookTable-container">
-                                <BookTable data={this.state.databaseData} />
+                                <BookManagement />
                             </div>
                         </div>
                     </div>
