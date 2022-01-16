@@ -223,26 +223,35 @@
             }
             else if($requestData["type"] == "searchBook")
             {
-                if(isset($requestData["keyword"]))
+                if(isset($requestData["by"]))
                 {
-                    $keyword = $requestData["keyword"];
-                    $operation = $dbManager->SelectRows("Libro", Array("*"), "Libro.Titolo LIKE '%" . $keyword . "%'");
-                    if($operation)
+                    if(isset($requestData["keyword"]))
                     {
-                        $resultArray = Array();
-                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                            array_push($resultArray, $row);
-                        respond(200, $resultArray); //Ok
+                        $by = $requestData["by"];
+                        $keyword = $requestData["keyword"];
+                        $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'");
+                        if($operation)
+                        {
+                            $resultArray = Array();
+                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                array_push($resultArray, $row);
+                            respond(200, $resultArray); //Ok
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        }
                     }
                     else
                     {
-                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
                     }
                 }
                 else
                 {
-                    respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
+                    respond(400, "'searchBook' requires 'by' which is the name of the field to search");
                 }
+                
             }
             else if($requestData["type"] == "updateBook")
             {
@@ -329,25 +338,33 @@
             }
             else if($requestData["type"] == "searchUser")
             {
-                if(isset($requestData["keyword"]))
+                if(isset($requestData["by"]))
                 {
-                    $keyword = $requestData["keyword"];
-                    $operation = $dbManager->SelectRows("Utente", Array("*"), "NumeroTessera LIKE '%" . $keyword . "%'");
-                    if($operation)
+                    if(isset($requestData["keyword"]))
                     {
-                        $resultArray = Array();
-                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                            array_push($resultArray, $row);
-                        respond(200, $resultArray); //Ok
+                        $by = $requestData["by"];
+                        $keyword = $requestData["keyword"];
+                        $operation = $dbManager->SelectRows("Utente", Array("*"), $by . " LIKE '%" . $keyword . "%'");
+                        if($operation)
+                        {
+                            $resultArray = Array();
+                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                array_push($resultArray, $row);
+                            respond(200, $resultArray); //Ok
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        }
                     }
                     else
                     {
-                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(400, "'searchUser' requires 'keyword' which is the string to be searched"); //Bad request
                     }
                 }
                 else
                 {
-                    respond(400, "'searchUser' requires 'keyword' which is the string to be searched"); //Bad request
+                    respond(400, "'searchUser' requires 'by' which is the name of the field to search");
                 }
             }
             else if($requestData["type"] == "updateUser")
@@ -435,25 +452,33 @@
             }
             else if($requestData["type"] == "searchBorrow")
             {
-                if(isset($requestData["keyword"]))
+                if(isset($requestData["by"]))
                 {
-                    $keyword = $requestData["keyword"];
-                    $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Prestito.CodicePrestito LIKE '%" . $keyword . "%'");
-                    if($operation)
+                    if(isset($requestData["keyword"]))
                     {
-                        $resultArray = Array();
-                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                            array_push($resultArray, $row);
-                        respond(200, $resultArray); //Ok
+                        $by = $requestData["by"];
+                        $keyword = $requestData["keyword"];
+                        $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), $by . " LIKE '%" . $keyword . "%'");
+                        if($operation)
+                        {
+                            $resultArray = Array();
+                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                array_push($resultArray, $row);
+                            respond(200, $resultArray); //Ok
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        }
                     }
                     else
                     {
-                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(400, "'searchBorrow' requires 'keyword' which is the string to be searched"); //Bad request
                     }
                 }
                 else
                 {
-                    respond(400, "'searchBorrow' requires 'keyword' which is the string to be searched"); //Bad request
+                    respond(400, "'searchBorrow' requires 'by' which is the name of the field to search");
                 }
             }
             else if($requestData["type"] == "updateBorrow")
