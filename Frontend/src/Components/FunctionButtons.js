@@ -5,6 +5,7 @@ import {currentIP} from './IPAddress'
 import BookForm from './BookForm';
 
 import Modal from './Modal';
+import UserForm from './UserForm';
 
 // Bottoni per l'Editing e cancellazione
 export default class FunctionButtons extends React.Component
@@ -58,6 +59,18 @@ export default class FunctionButtons extends React.Component
 
         }
     }
+
+    RenderForm() {
+        console.log(this.props.formType);
+        switch(this.props.formType) {
+            case 'bookForm':
+                return <BookForm requestType="update" elementID={this.state.bookKey}/>;
+            case 'userForm':
+                return <UserForm />;
+            default:
+                return null;
+        }
+    }
     
     render()
     {
@@ -73,7 +86,7 @@ export default class FunctionButtons extends React.Component
                         </button>
 
                         <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
-                            <BookForm requestType="update" elementID={this.state.bookKey}/>
+                            {this.RenderForm()}
                         </Modal> 
                 </div>  
             );
