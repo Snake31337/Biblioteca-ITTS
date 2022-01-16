@@ -12,6 +12,7 @@ import {currentIP} from './IPAddress'
 import { Routes, Route } from 'react-router';
 import {hyperlinks} from './Pages'
 import UserManagement from './UserManagement';
+import NotFound from './NotFound';
 
 
 
@@ -104,6 +105,7 @@ class Home extends React.Component
                                     <Route path={pages.link} element={pages.class}></Route>
                                 ))
                                 }
+                                <Route path="*" element={<NotFound />}/>
                             </Routes>
                                 
                         </div>

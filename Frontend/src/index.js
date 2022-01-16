@@ -19,7 +19,9 @@ ReactDOM.render(
             <Route path={pages.link} element={pages.class}></Route>
           ))
           }
+          <Route path="*" component={<NotFound />}/>
         </Route>
+        
         
         {/* <Route path="/" element={<Home />}></Route>
         <Route path="/usermanagement" element={<UserManagement />}></Route>
