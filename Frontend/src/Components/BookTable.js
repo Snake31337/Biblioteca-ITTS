@@ -13,7 +13,7 @@ export default class BookTable extends React.Component
 
         this.MouseEnter = this.MouseEnter.bind(this);
         this.MouseLeave = this.MouseLeave.bind(this);
-        this.removeRow = this.removeRow.bind(this);
+        //this.removeRow = this.removeRow.bind(this);
     }
 
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
@@ -38,9 +38,9 @@ export default class BookTable extends React.Component
     removeRow(bookKey) {    // Questa funzione viene chiamata quando viene premuto il pulsante cancella riga in Functionbuttons
         console.log("removeRow function in booktable");
 
-        this.setState({ showRow: [true, bookKey] });
+        /*this.setState({ showRow: [true, bookKey] });
 
-        this.props.fetchRemoteData();
+        this.props.fetchRemoteData();*/
 
 
     }
