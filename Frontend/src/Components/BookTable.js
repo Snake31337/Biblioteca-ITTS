@@ -2,7 +2,6 @@ import '../CSS/Table.scss';
 import React from 'react';
 import FunctionButtons from './FunctionButtons';
 
-
 export default class BookTable extends React.Component
 {
     constructor(props)
@@ -47,7 +46,7 @@ export default class BookTable extends React.Component
                                 <th><i className="bi bi-house"></i>Editore</th>
                                 <th><i className="bi bi-calendar-event"></i>Anno</th>
                                 <th><i className="bi bi-translate"></i>Lingua</th>
-                                <th>Azione</th>
+                                <th className="functionButtons-column">Azione</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,7 +59,7 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            {this.CheckMouseState(decodedData.CodiceLibro) ? <FunctionButtons/> : null}
+                                            <FunctionButtons relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                                         </td>
                                     </tr>
                                 ))
