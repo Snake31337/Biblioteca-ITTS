@@ -1,5 +1,8 @@
 <?php
-    function respond($statusCode, $data)
+
+use JetBrains\PhpStorm\ArrayShape;
+
+function respond($statusCode, $data)
     {
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
@@ -10,7 +13,10 @@
     class DatabaseManager
     {
         private $mysqli;
+
         public $lastQuery;
+        public $lastError;
+        public $lastResult;
 
         public function __construct($hostname, $username, $password)
         {
@@ -28,10 +34,14 @@
         {
             $this->lastQuery = $queryToSend;
             $queryResult = mysqli_query($this->mysqli, $queryToSend);
+
+            $this->lastError = mysqli_error($this->mysqli);
+            $this->lastResult = $queryResult;
+            
             if($queryResult)
-                return Array("successful" => true, "response" => $queryResult);
+                return true;
             else
-                return Array("successful" => false, "response" => mysqli_error($this->mysqli));
+                return false;
         }
 
         public function SelectDatabase($databaseName)
@@ -44,8 +54,11 @@
         // SQL string methods //
         //####################//
 
-        private function GetInsertRow($tableName, $columns, $values)
+        private function GetInsertRow($tableName, $columnsAndValues)
         {
+            $columns = array_keys($columnsAndValues);
+            $values = array_values($columnsAndValues);
+
             $sqlQuery = "INSERT INTO " . $tableName;
             $sqlQuery .= " (" . implode(", ", $columns) . ")";
             $sqlQuery .= " VALUES (" . implode(", ", $values) . ")";
@@ -72,10 +85,14 @@
             return $sqlQuery;
         }
 
-        private function GetUpdateRows($tableName, $column, $value, $whereCondition)
+        private function GetUpdateRows($tableName, $columnsAndValues, $whereCondition)
         {
+            $setArray = Array();
+
             $sqlQuery = "UPDATE " . $tableName;
-            $sqlQuery .= " SET " . $column . " = " . $value;
+            foreach($columnsAndValues as $column => $value)
+                array_push($setArray, $column . " = " . $value);
+            $sqlQuery .= " SET " . implode(",", $setArray);
             $sqlQuery .= " WHERE " . $whereCondition;
             return $sqlQuery;
         }
@@ -94,9 +111,9 @@
         // Public functions //
         //##################//
 
-        public function InsertRow($tableName, $columns, $values)
+        public function InsertRow($tableName, $columnsAndValues)
         {
-            return $this->Query($this->GetInsertRow($tableName, $columns, $values));
+            return $this->Query($this->GetInsertRow($tableName, $columnsAndValues));
         }
 
         public function SelectRows($tableName, $columns, $whereCondition)
@@ -109,14 +126,42 @@
             return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition));
         }
 
-        public function UpdateRows($tableName, $column, $value, $whereCondition)
+        public function UpdateRows($tableName, $columnsAndValues, $whereCondition)
         {
-            return $this->Query($this->GetUpdateRows($tableName, $column, $value, $whereCondition));
+            return $this->Query($this->GetUpdateRows($tableName, $columnsAndValues, $whereCondition));
         }
 
         public function DeleteRows($tableName, $whereCondition)
         {
             return $this->Query($this->GetDeleteRows($tableName, $whereCondition));
+        }
+
+
+
+        public function FixData($data, $tableName)
+        {   
+            $whereArray = Array();
+            foreach($data as $key => $value)
+                array_push($whereArray, "COLUMN_NAME = '" . $key . "'");
+
+            $whereCondition = "TABLE_NAME = '" . $tableName . "'";
+            $whereCondition .= " AND " . implode(" OR ", $whereArray);
+            $operation = $this->Query($this->GetSelectRows("INFORMATION_SCHEMA.COLUMNS", Array("COLUMN_NAME", "DATA_TYPE"), $whereCondition));
+            if($operation)
+            {
+                $typesArray = Array();
+                while($row = mysqli_fetch_row($this->lastResult))
+                    $typesArray[$row[0]] = $row[1];
+                foreach($data as $key => $value)
+                    if($typesArray[$key] == "varchar")
+                        $data[$key] = "'" . $data[$key] . "'";
+                
+                return $data;
+            }
+            else
+            {
+                return false; 
+            }
         }
 
         //End of Public functions
@@ -139,42 +184,38 @@
         respond(500, "Can't connect to SQL server: " . $e->getMessage()); //Internal server error
     }
     $operation = $dbManager->SelectDatabase(DBNAME);
-    if($operation["successful"])
+    if($operation)
     {
         if(isset($requestData["type"]))
         {
             if($requestData["type"] == "listBooks")
             {
                 $operation = $dbManager->SelectRows("Libro", Array("*"), "");
-                if($operation["successful"])
+                if($operation)
                 {
                     $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($operation["response"]))
+                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
                         array_push($resultArray, $row);
                     respond(200, $resultArray); //Ok
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                 }
             }
             else if($requestData["type"] == "insertBook")
             {
                 if(isset($requestData["bookArgs"]))
                 {
-                    $bookArgs = $requestData["bookArgs"];
-                    $operation = $dbManager->InsertRow(
-                        "Libro", 
-                        Array("Titolo", "Lingua", "Autore", "Editore", "AnnoPubblicazione", "Categoria", "ISBN"),
-                        Array("'" . $bookArgs["Titolo"] . "'", "'" . $bookArgs["Lingua"] . "'", "'" . $bookArgs["Autore"] . "'", "'" . $bookArgs["Editore"] . "'", $bookArgs["AnnoPubblicazione"], "'" . $bookArgs["Categoria"] . "'", "'" . $bookArgs["ISBN"] . "'")
-                    );
-                    if($operation["successful"])
+                    $bookArgs = $dbManager->FixData($requestData["bookArgs"], "Libro");
+                    $operation = $dbManager->InsertRow("Libro", $bookArgs);
+                    if($operation)
                     {
-                        respond(200, "Inserted successfully (" . $operation["response"] . ")"); //Ok
+                        respond(200, "Inserted successfully (" . $dbManager->lastResult . ")"); //Ok
                     }
                     else
                     {
-                        respond(500, "Couldn't insert row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(500, "Couldn't insert row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                     }
                 }
                 else
@@ -188,16 +229,16 @@
                 {
                     $keyword = $requestData["keyword"];
                     $operation = $dbManager->SelectRows("Libro", Array("*"), "Libro.Titolo LIKE '%" . $keyword . "%'");
-                    if($operation["successful"])
+                    if($operation)
                     {
                         $resultArray = Array();
-                        while($row = mysqli_fetch_assoc($operation["response"]))
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
                             array_push($resultArray, $row);
                         respond(200, $resultArray); //Ok
                     }
                     else
                     {
-                        respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                     }
                 }
                 else
@@ -209,26 +250,18 @@
             {
                 if(isset($requestData["id"]))
                 {
-                    if(isset($requestData["column"]))
+                    if(isset($requestData["bookArgs"]))
                     {
-                        if(isset($requestData["value"]))
+                        $id = $requestData["id"];
+                        $bookArgs = $dbManager->FixData($requestData["bookArgs"], "Libro");
+                        $operation = $dbManager->UpdateRows("Libro", $bookArgs, "CodiceLibro = " . $id);
+                        if($operation)
                         {
-                            $id = $requestData["id"];
-                            $column = $requestData["column"];
-                            $value = $requestData["value"];
-                            $operation = $dbManager->UpdateRows("Libro", $column, $value, "CodiceLibro = " . $id);
-                            if($operation["successful"])
-                            {
-                                respond(200, "Updated successfully (" . $operation["response"] . ")");
-                            }
-                            else
-                            {
-                                respond(500, "Couldn't update row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
-                            }
+                            respond(200, "Updated successfully (" . $dbManager->lastResult . ")");
                         }
                         else
                         {
-                            respond(400, "'updateBook' requires 'value' which is the value that will modify the column");
+                            respond(500, "Couldn't update row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
                         }
                     }
                     else
@@ -247,13 +280,13 @@
                 {
                     $id = $requestData["id"];
                     $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
-                    if($operation["successful"])
+                    if($operation)
                     {
-                        respond(200, "Deleted successfully (" . $operation["response"] . ")");
+                        respond(200, "Deleted successfully (" . $dbManager->lastResult . ")");
                     }
                     else
                     {
-                        respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                        respond(500, "Couldn't delete row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
                     }
                 }
                 else
@@ -264,16 +297,16 @@
             else if($requestData["type"] == "listUsers")
             {
                 $operation = $dbManager->SelectRows("Utente", Array("*"), "");
-                if($operation["successful"])
+                if($operation)
                 {
                     $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($operation["response"]))
+                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
                         array_push($resultArray, $row);
                     respond(200, $resultArray); //Ok
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                 }
             }
             else if($requestData["type"] == "insertUser")
@@ -286,13 +319,13 @@
                         Array("CodiceFiscale", "Nome", "Cognome", "DataRegistrazioneTessera", "Indirizzo", "NumeroTessera"),
                         Array("'" . $userArgs["CodiceFiscale"] . "'", "'" . $userArgs["Nome"] . "'", "'" . $userArgs["Cognome"] . "'", date_format(date_create($userArgs["DataRegistrazioneTessera"]), "Ymd"), "'" . $userArgs["Indirizzo"] . "'", $userArgs["NumeroTessera"])
                     );
-                    if($operation["successful"])
+                    if($operation)
                     {
-                        respond(200, "Row successfully inserted (" . $operation["response"] . ")"); //Ok
+                        respond(200, "Row successfully inserted (" . $dbManager->lastResult . ")"); //Ok
                     }
                     else
                     {
-                        respond(500, "Couldn't insert row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        respond(500, "Couldn't insert row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
                     }
                 }
                 else
@@ -312,7 +345,7 @@
     }
     else
     {
-        respond(500, "Can't select database: " . $operation["response"]); //Internal server error
+        respond(500, "Can't select database: " . $dbManager->lastError); //Internal server error
     }
 
     die;
