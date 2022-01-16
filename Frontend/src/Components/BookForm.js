@@ -27,6 +27,28 @@ export default class BookForm extends React.Component{
 
         console.log(JSON.stringify(this.state));
 
+    if(this.props.requestType === "update"){
+        console.log("Updating")
+        fetch(currentIP, {
+            method: "POST",
+            
+            body: JSON.stringify({
+                type: 'updateBook',
+                id: this.props.elementID,
+                bookArgs: this.state,
+            })
+        }).then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({ data : responseJson })
+        })
+        .then((response) => {console.log(response.json())})
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    else
+    {
+        console.log("Fetching")
         fetch(currentIP, {
             method: "POST",
             
@@ -42,50 +64,55 @@ export default class BookForm extends React.Component{
         .catch((error) => {
           console.error(error);
         });
+
+        }
     }
     
-
     render(){
+        if(this.props.requestType === "update"){
+            var title = "Modifica libro"
+        }else{
+            var title = "Aggiungi un libro"
+        }
         return (
-        <div>
-                <div className='title'>
-                Aggiungi un Libro
+            <div>
+                <div className='title'>{title}</div>
+                    <div className="form-container">
+                        <form className='fields-container' onSubmit={this.handleSubmit}>
+                        <label>
+                            Titolo: 
+                            <input name="Titolo" type="text" value={this.state.Titolo} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                            Autore: 
+                            <input name="Autore" type="text" value={this.state.Autore} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                            Lingua: 
+                            <input name="Lingua" type="text" value={this.state.Lingua} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                            Editore:
+                            <input name="Editore" type="text" value={this.state.Editore} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                            Anno Pubblicazione:
+                            <input name="AnnoPubblicazione" type="date" value={this.state.AnnoPubblicazione} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                        Categoria:
+                            <input name="Categoria" type="select" value={this.state.Categoria} onChange={this.handleInputChange}></input>
+                        </label>
+                        <label>
+                            ISBN:
+                            <input name="ISBN" type="number" value={this.state.ISBN} onChange={this.handleInputChange}></input>
+                        </label>
+                        <input className='submitButton' type='submit'/>
+                        </form>
+                    </div>
                 </div>
-                <div className="form-container">
-                    <form className='fields-container' onSubmit={this.handleSubmit}>
-                    <label>
-                        Titolo: 
-                        <input name="Titolo" type="text" value={this.state.Titolo} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        Autore: 
-                        <input name="Autore" type="text" value={this.state.Autore} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        Lingua: 
-                        <input name="Lingua" type="text" value={this.state.Lingua} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        Editore:
-                        <input name="Editore" type="text" value={this.state.Editore} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        Anno Pubblicazione:
-                        <input name="AnnoPubblicazione" type="date" value={this.state.AnnoPubblicazione} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                    Categoria:
-                        <input name="Categoria" type="select" value={this.state.Categoria} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        ISBN:
-                        <input name="ISBN" type="number" value={this.state.ISBN} onChange={this.handleInputChange}></input>
-                    </label>
-                    <input className='submitButton' type='submit'/>
-                    </form>
-                </div>
-            </div>
-        );
+            );
+        
     }
 }
 
