@@ -1,6 +1,6 @@
 import React from 'react';
 import {currentIP} from './IPAddress'
-import "../CSS/UserForm.scss"
+import "../CSS/Form.scss"
 
 export default class BookForm extends React.Component{
     constructor(props){

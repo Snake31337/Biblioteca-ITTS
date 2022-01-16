@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../CSS/Table.scss';
 
+import {currentIP} from './IPAddress'
+
 export default class BorrowTable extends React.Component {
     constructor(props) {
         super(props);
@@ -17,10 +19,11 @@ export default class BorrowTable extends React.Component {
 
 
     renderMyData(){
-        fetch('http://192.168.105.77:8080/', {
+        fetch(currentIP, {
             method: 'POST',
             body: JSON.stringify({
-          type: '',
+            //Il type è da sostituire    
+            type: 'listBooks',
         })
         })
             .then((response) => response.json())
@@ -49,16 +52,12 @@ export default class BorrowTable extends React.Component {
             </thead>
             <tbody>
             {
-                this.state.data.map((studente) => (
-                            <tr>
-                            <td>{studente.CodiceFiscale}</td>
-                            <td>{studente.Nome} </td>
-                            <td>{studente.Cognome}</td>
-                            <td>{studente.DataRegistrazioneTessera}</td>
-                            <td>{studente.Indirizzo}</td>
-                            <td>{studente.NumeroTessera}</td>
+                this.state.data.map((borrow) => (
+                        <tr>
+
                         </tr>
-                ))
+                    )
+                )
             }
             </tbody>
         </table>

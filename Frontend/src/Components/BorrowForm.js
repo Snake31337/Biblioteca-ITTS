@@ -3,10 +3,10 @@ import "../CSS/Form.scss"
 
 import {currentIP} from './IPAddress'
 
-class UserForm extends React.Component{
+class BorrowForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = {CodiceFiscale: '', Nome: '', Cognome: '', DataRegistrazioneTessera: '', Indirizzo: '', NumeroTessera: ''};     
+        this.state = {Utente: '', Libro: '', DataPrestito: '', DataScadenza: ''};     
         
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -32,7 +32,7 @@ class UserForm extends React.Component{
             method: "POST",
             
             body: JSON.stringify({
-                type: 'insertUser',
+                type: 'insertBorrow',
                 userArgs: this.state,
             })
         }).then((response) => response.json())
@@ -50,34 +50,27 @@ class UserForm extends React.Component{
         return (
 <div>
                 <div className='title'>
-                Aggiungi un utente
+                Aggiungi un prestito
                 </div>
                 <div className="form-container">
                     <form className='fields-container' onSubmit={this.handleSubmit}>
                     <label>
-                        Codice Fiscale: 
-                        <input name="CodiceFiscale" type="text" value={this.state.CodiceFiscale} onChange={this.handleInputChange}></input>
+                        Utente:
+                        <input name="Utente" type="text" value={this.state.Utente} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
-                        Nome: 
-                        <input name="Nome" type="text" value={this.state.Nome} onChange={this.handleInputChange}></input>
+                        Libro: 
+                        <input name="Libro" type="text" value={this.state.Libro} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
-                        Cognome:
-                        <input name="Cognome" type="text" value={this.state.Cognome} onChange={this.handleInputChange}></input>
+                        Data Prestito:
+                        <input name="DataPrestito" type="text" value={this.state.DataPrestito} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
-                        Registrazione Tessera:
-                        <input name="DataRegistrazioneTessera" type="date" value={this.state.DataRegistrazioneTessera} onChange={this.handleInputChange}></input>
+                        Data Scadenza:
+                        <input name="DataScadenza" type="text" value={this.state.DataScadenza} onChange={this.handleInputChange}></input>
                     </label>
-                    <label>
-                        Indirizzo:
-                        <input name="Indirizzo" type="text" value={this.state.Indirizzo} onChange={this.handleInputChange}></input>
-                    </label>
-                    <label>
-                        Numero Tessera:
-                        <input name="NumeroTessera" type="number" value={this.state.NumeroTessera} onChange={this.handleInputChange}></input>
-                    </label>
+
                     <input className='submitButton' type='submit'/>
                     </form>
                 </div>
@@ -86,7 +79,7 @@ class UserForm extends React.Component{
     }
 }
 
-export default UserForm;
+export default BorrowForm;
 
 
 
