@@ -32,6 +32,7 @@
     text-decoration: none;
     padding: 10px;
     color: $primary_1;
+    transition: 0.4s;
 
     &:hover { // Quando fai hover sul link del dropdown cambia colore background
         background-color: $secondary_1;

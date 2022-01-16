@@ -1,0 +1,36 @@
+@import './ColorScheme.scss';
+
+.button {
+    background-color: $primary_1;
+    border: none;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    align-items: center;
+    text-decoration: none;
+    display: flex;
+    font-size: 16px;
+    margin: 4px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 15px;
+    float: right;
+    justify-items: space-between;
+
+      @media screen and (max-width: 900px){
+      .label{
+        display: none;
+      }
+
+    }
+
+    &:hover{
+      background-color: $primary_3;
+    }
+
+    .icon{
+      align-items: center;
+      font-size: larger;
+      margin-left: px;
+    }
+}
