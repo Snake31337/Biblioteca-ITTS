@@ -80,7 +80,7 @@ export default class UserTable extends React.Component {
                             <td>{studente.Indirizzo}</td>
                             <td>{studente.NumeroTessera}</td>
                             <td className="functionButtons-cell">
-                                <FunctionButtons removeRow={this.removeRow} relativeTo={studente.CodiceFiscale} hidden={this.CheckMouseState(studente.CodiceFiscale) ? false : true} />
+                                <FunctionButtons formType="userForm" removeRow={this.removeRow} relativeTo={studente.CodiceFiscale} hidden={this.CheckMouseState(studente.CodiceFiscale) ? false : true} />
                             </td>
                         </tr>
                 ))
