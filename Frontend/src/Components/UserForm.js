@@ -1,5 +1,5 @@
 import React from 'react';
-import "../CSS/UserForm.scss"
+import "../CSS/Form.scss"
 
 import {currentIP} from './IPAddress'
 
