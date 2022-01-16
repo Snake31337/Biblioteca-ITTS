@@ -57,6 +57,7 @@ export default class UserManagement extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'searchUser',
+                    by: 'Utente.NumeroTessera',
                     keyword: searchKey,
                 })
             })
@@ -109,7 +110,7 @@ export default class UserManagement extends React.Component {
                                 <UserForm />
                             </Modal>
             
-                            <UserTable className="main-item" />
+                            <UserTable className="main-item" data={this.state.databaseData} />
                         </div>
                     </div>
                 </div>

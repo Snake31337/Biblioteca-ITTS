@@ -58,6 +58,7 @@ export default class BookManagement extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'searchBook',
+                    by: 'Libro.Titolo',
                     keyword: searchKey,
                 })
             })
