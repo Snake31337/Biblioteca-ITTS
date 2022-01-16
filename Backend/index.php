@@ -246,14 +246,22 @@
                 if(isset($requestData["id"]))
                 {
                     $id = $requestData["id"];
-                    $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
+                    $operation = $dbManager->DeleteRows("Scrive", "CodiceLibro = " . $id);
                     if($operation["successful"])
                     {
-                        respond(200, "Deleted successfully (" . $operation["response"] . ")");
+                        $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
+                        if($operation["successful"])
+                        {
+                            respond(200, "Deleted successfully (" . $operation["response"] . ")");
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                        }
                     }
                     else
                     {
-                        respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                        respond(500, "Couldn't delete relation: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
                     }
                 }
                 else
