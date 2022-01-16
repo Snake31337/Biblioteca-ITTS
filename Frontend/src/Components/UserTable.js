@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../CSS/Table.scss';
 import FunctionButtons from './FunctionButtons';
+import 'semantic-ui-css/semantic.min.css'   
+import { Loader } from 'semantic-ui-react'
 
 import {currentIP} from './IPAddress'
 
@@ -12,27 +14,6 @@ export default class UserTable extends React.Component {
           data : [],
           isMouseInside: [false, '']
         };
-    }
-
-    componentWillMount() {
-        this.renderMyData();
-    }
-
-    renderMyData(){
-        fetch(currentIP, {
-            method: 'POST',
-            body: JSON.stringify({
-          type: 'listUsers',
-        })
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              this.setState({ data : responseJson })
-            })
-            .then((response) => {console.log(response.json())})
-            .catch((error) => {
-              console.error(error);
-            });
     }
     
     // These functions are used in order to show or hide <FunctionButtons /> (editing and deleting)
@@ -55,39 +36,83 @@ export default class UserTable extends React.Component {
     }
 
     render(){
-    return(
-    <div className="table-container">
-        <table className="book-table">
-            <thead>
-                <tr className='first-row'>
-                    <th><i className="bi bi-file-earmark-font"></i>C. Fiscale</th>
-                    <th><i className="bi bi-people-fill"></i>Nome</th>
-                    <th>Cognome</th>
-                    <th><i class="bi bi-calendar-event"></i>Registrazione Tessera</th>
-                    <th><i class="bi bi-globe"></i>Indirizzo</th>
-                    <th><i class="bi bi-globe"></i>Numero Tessera</th>
-                    <th className="functionButtons-column"></th>
-                </tr>
-            </thead>
-            <tbody>
-            {
-                this.state.data.map((studente) => (
-                            <tr key={studente.CodiceFiscale} onMouseEnter={(e) => this.MouseEnter(e, studente.CodiceFiscale)} onMouseLeave={(e) => this.MouseLeave(e)}>
-                            <td>{studente.CodiceFiscale}</td>
-                            <td>{studente.Nome} </td>
-                            <td>{studente.Cognome}</td>
-                            <td>{studente.DataRegistrazioneTessera}</td>
-                            <td>{studente.Indirizzo}</td>
-                            <td>{studente.NumeroTessera}</td>
-                            <td className="functionButtons-cell">
-                                <FunctionButtons removeRow={this.removeRow} relativeTo={studente.CodiceFiscale} hidden={this.CheckMouseState(studente.CodiceFiscale) ? false : true} />
-                            </td>
+        if(this.props.data == null)
+        {
+            return (
+                <div className="table-container">
+                    <table className="book-table">
+                        <br></br>
+                            <Loader active indeterminate inline='centered'>Fetching data</Loader>
+                        <br></br>
+                    </table>
+                </div>
+            )
+        }
+        else if(Array.isArray(this.props.data) && this.props.data.length > 0)
+        {
+            return(
+            <div className="table-container">
+                <table className="book-table">
+                    <thead>
+                        <tr className='first-row'>
+                            <th><i className="bi bi-file-earmark-font"></i>C. Fiscale</th>
+                            <th><i className="bi bi-people-fill"></i>Nome</th>
+                            <th>Cognome</th>
+                            <th><i class="bi bi-calendar-event"></i>Registrazione Tessera</th>
+                            <th><i class="bi bi-globe"></i>Indirizzo</th>
+                            <th><i class="bi bi-globe"></i>Numero Tessera</th>
+                            <th className="functionButtons-column"></th>
                         </tr>
-                ))
-            }
-            </tbody>
-        </table>
-    </div>
-    )};
-    
+                    </thead>
+                    <tbody>
+                    {
+                        this.props.data.map((studente) => (
+                            <tr key={studente.CodiceFiscale} onMouseEnter={(e) => this.MouseEnter(e, studente.CodiceFiscale)} onMouseLeave={(e) => this.MouseLeave(e)}>
+                                <td>{studente.CodiceFiscale}</td>
+                                <td>{studente.Nome} </td>
+                                <td>{studente.Cognome}</td>
+                                <td>{studente.DataRegistrazioneTessera}</td>
+                                <td>{studente.Indirizzo}</td>
+                                <td>{studente.NumeroTessera}</td>
+                                <td className="functionButtons-cell">
+                                    <FunctionButtons removeRow={this.removeRow} relativeTo={studente.CodiceFiscale} hidden={this.CheckMouseState(studente.CodiceFiscale) ? false : true} />
+                                </td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
+            </div>
+            )
+        }
+        else
+        {
+            return (
+                <div className="table-container">
+                    <table className="book-table">
+                        <thead>
+                            <tr className='first-row'>
+                                <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
+                                <th><i className="bi bi-people-fill"></i>Autore/i</th>
+                                <th><i className="bi bi-house"></i>Editore</th>
+                                <th><i className="bi bi-calendar-event"></i>Anno</th>
+                                <th><i className="bi bi-translate"></i>Lingua</th>
+                                <th className="functionButtons-column">Azione</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>No data</td>
+                                <td>No data</td>
+                                <td>No data</td>
+                                <td>No data</td>
+                                <td>No data</td>
+                                <td>No actions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
+    }
 }
