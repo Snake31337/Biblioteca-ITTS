@@ -5,7 +5,7 @@ import BookForm from './BookForm'
 import Modal from './Modal'
 import SearchBar from './SearchBar';
 
-import {currentIP} from './IPAddress'
+import {currentIP} from './IPAddress';
 
 import '../CSS/UserManagement.scss';
 import '../CSS/Home.scss';
@@ -102,7 +102,7 @@ export default class BookManagement extends React.Component {
                         </Modal>
         
                         <div className="main-item searchBar-container">
-                            <SearchBar updateKeyword={this.updateKeyword} />
+                            <SearchBar updateKeyword={this.updateKeyword} label="Quale libro stai cercando?"/>
                         </div>
 
                         <div className="button rounded" onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>

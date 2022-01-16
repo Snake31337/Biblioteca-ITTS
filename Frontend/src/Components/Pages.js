@@ -1,7 +1,7 @@
 import UserManagement from "./UserManagement";
 import Home from './Home'
 import BookManagement from "./BookManagement";
-//import Borrow from './Borrow'
+import Borrow from './Borrow'
 
 export const hyperlinks = 
 [
@@ -15,9 +15,9 @@ export const hyperlinks =
         link: "/usermanagement",
         class: <UserManagement />
     },
-    /*{
+    {
         label: "Prestiti",
         link: "/borrow",
         class: <Borrow />
-    }*/
+    }
 ]

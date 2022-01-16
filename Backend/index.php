@@ -1,8 +1,6 @@
 <?php
 
-use JetBrains\PhpStorm\ArrayShape;
-
-function respond($statusCode, $data)
+    function respond($statusCode, $data)
     {
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
@@ -142,9 +140,9 @@ function respond($statusCode, $data)
         {   
             $whereArray = Array();
             foreach($data as $key => $value)
-                array_push($whereArray, "COLUMN_NAME = '" . $key . "'");
+                array_push($whereArray, "COLUMN_NAME = \"" . $key . "\"");
 
-            $whereCondition = "TABLE_NAME = '" . $tableName . "'";
+            $whereCondition = "TABLE_NAME = \"" . $tableName . "\"";
             $whereCondition .= " AND " . implode(" OR ", $whereArray);
             $operation = $this->Query($this->GetSelectRows("INFORMATION_SCHEMA.COLUMNS", Array("COLUMN_NAME", "DATA_TYPE"), $whereCondition));
             if($operation)
@@ -154,7 +152,7 @@ function respond($statusCode, $data)
                     $typesArray[$row[0]] = $row[1];
                 foreach($data as $key => $value)
                     if($typesArray[$key] == "varchar")
-                        $data[$key] = "'" . $data[$key] . "'";
+                        $data[$key] = "\"" . $data[$key] . "\"";
                 
                 return $data;
             }
@@ -313,12 +311,8 @@ function respond($statusCode, $data)
             {
                 if(isset($requestData["userArgs"]))
                 {
-                    $userArgs = $requestData["userArgs"];
-                    $operation = $dbManager->InsertRow(
-                        "Utente", 
-                        Array("CodiceFiscale", "Nome", "Cognome", "DataRegistrazioneTessera", "Indirizzo", "NumeroTessera"),
-                        Array("'" . $userArgs["CodiceFiscale"] . "'", "'" . $userArgs["Nome"] . "'", "'" . $userArgs["Cognome"] . "'", date_format(date_create($userArgs["DataRegistrazioneTessera"]), "Ymd"), "'" . $userArgs["Indirizzo"] . "'", $userArgs["NumeroTessera"])
-                    );
+                    $userArgs = $dbManager->FixData($requestData["userArgs"], "Utente");
+                    $operation = $dbManager->InsertRow("Utente", $userArgs);
                     if($operation)
                     {
                         respond(200, "Row successfully inserted (" . $dbManager->lastResult . ")"); //Ok
@@ -331,6 +325,183 @@ function respond($statusCode, $data)
                 else
                 {
                     respond(400, "'insertUser' needs 'userArgs' which is an array of a User attributes"); //Bad request
+                }
+            }
+            else if($requestData["type"] == "searchUser")
+            {
+                if(isset($requestData["keyword"]))
+                {
+                    $keyword = $requestData["keyword"];
+                    $operation = $dbManager->SelectRows("Utente", Array("*"), "NumeroTessera LIKE '%" . $keyword . "%'");
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
+                }
+                else
+                {
+                    respond(400, "'searchUser' requires 'keyword' which is the string to be searched"); //Bad request
+                }
+            }
+            else if($requestData["type"] == "updateUser")
+            {
+                if(isset($requestData["id"]))
+                {
+                    if(isset($requestData["userArgs"]))
+                    {
+                        $id = $requestData["id"];
+                        $userArgs = $dbManager->FixData($requestData["userArgs"], "Utente");
+                        $operation = $dbManager->UpdateRows("Utente", $userArgs, "CodiceFiscale = " . $id);
+                        if($operation)
+                        {
+                            respond(200, "Updated successfully (" . $dbManager->lastResult . ")");
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't update row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
+                        }
+                    }
+                    else
+                    {
+                        respond(400, "'updateUser' requires 'userArgs' which is an array of a User attributes");
+                    }
+                }
+                else
+                {
+                    respond(400, "'updateUser' requires 'id' which is the primary key of the user to be modified");
+                }
+            }
+            else if($requestData["type"] == "deleteUser")
+            {
+                if(isset($requestData["id"]))
+                {
+                    $id = $requestData["id"];
+                    $operation = $dbManager->DeleteRows("Utente", "CodiceFiscale = " . $id);
+                    if($operation)
+                    {
+                        respond(200, "Deleted successfully (" . $dbManager->lastResult . ")");
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't delete row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
+                    }
+                }
+                else
+                {
+                    respond(400, "'deleteUser' requires 'id' which is the primary key of the user to be deleted");
+                }
+            }
+            else if($requestData["type"] == "listBorrows")
+            {
+                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "");
+                if($operation)
+                {
+                    $resultArray = Array();
+                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                        array_push($resultArray, $row);
+                    respond(200, $resultArray); //Ok
+                }
+                else
+                {
+                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                }
+            }
+            else if($requestData["type"] == "insertBorrow")
+            {
+                if(isset($requestData["borrowArgs"]))
+                {
+                    $borrowArgs = $dbManager->FixData($requestData["borrowArgs"], "Prestito");
+                    $operation = $dbManager->InsertRow("Prestito", $borrowArgs);
+                    if($operation)
+                    {
+                        respond(200, "Row successfully inserted (" . $dbManager->lastResult . ")"); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't insert row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
+                }
+                else
+                {
+                    respond(400, "'insertBorrow' needs 'borrowArgs' which is an array of a User attributes"); //Bad request
+                }
+            }
+            else if($requestData["type"] == "searchBorrow")
+            {
+                if(isset($requestData["keyword"]))
+                {
+                    $keyword = $requestData["keyword"];
+                    $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Prestito.CodicePrestito LIKE '%" . $keyword . "%'");
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
+                }
+                else
+                {
+                    respond(400, "'searchBorrow' requires 'keyword' which is the string to be searched"); //Bad request
+                }
+            }
+            else if($requestData["type"] == "updateBorrow")
+            {
+                if(isset($requestData["id"]))
+                {
+                    if(isset($requestData["borrowArgs"]))
+                    {
+                        $id = $requestData["id"];
+                        $borrowArgs = $dbManager->FixData($requestData["borrowArgs"], "Prestito");
+                        $operation = $dbManager->UpdateRows("Prestito", $borrowArgs, "CodicePrestito = " . $id);
+                        if($operation)
+                        {
+                            respond(200, "Updated successfully (" . $dbManager->lastResult . ")");
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't update row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
+                        }
+                    }
+                    else
+                    {
+                        respond(400, "'updateBorrow' requires 'userArgs' which is an array of a Borrow attributes");
+                    }
+                }
+                else
+                {
+                    respond(400, "'updateBorrow' requires 'id' which is the primary key of the borrow to be modified");
+                }
+            }
+            else if($requestData["type"] == "deleteBorrow")
+            {
+                if(isset($requestData["id"]))
+                {
+                    $id = $requestData["id"];
+                    $operation = $dbManager->DeleteRows("Prestito", "CodicePrestito = " . $id);
+                    if($operation)
+                    {
+                        respond(200, "Deleted successfully (" . $dbManager->lastResult . ")");
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't delete row: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery);
+                    }
+                }
+                else
+                {
+                    respond(400, "'deleteBorrow' requires 'id' which is the primary key of the borrow to be deleted");
                 }
             }
             else
