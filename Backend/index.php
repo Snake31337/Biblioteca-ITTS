@@ -54,7 +54,8 @@
 
         private function GetSelectRows($tableName, $columns, $whereCondition)
         {
-            $sqlQuery = "SELECT " . implode(", ", $columns) . " FROM " . $tableName;
+            $sqlQuery = "SELECT " . implode(", ", $columns);
+            $sqlQuery .= " FROM " . $tableName;
             if($whereCondition != "")
                 $sqlQuery .= " WHERE " . $whereCondition;
             return $sqlQuery;
@@ -62,11 +63,28 @@
 
         private function GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition)
         {
-            $sqlQuery = "SELECT " . implode(", ", $columnsWithTables) . " FROM " . $tableName1 . ", " . $tableName2 . ", " . $relationTable;
+            $sqlQuery = "SELECT " . implode(", ", $columnsWithTables);
+            $sqlQuery .= " FROM " . $tableName1 . ", " . $tableName2 . ", " . $relationTable;
             $sqlQuery .= " WHERE " . $tableName1 . "." . $primaryKey1 . " = " . $relationTable . "." . $primaryKey1;
             $sqlQuery .= " AND " . $tableName2 . "." . $primaryKey2 . " = " . $relationTable . "." . $primaryKey2;
             if($whereCondition != "")
                 $sqlQuery .= " AND " . $whereCondition;
+            return $sqlQuery;
+        }
+
+        private function GetUpdateRows($tableName, $column, $value, $whereCondition)
+        {
+            $sqlQuery = "UPDATE " . $tableName;
+            $sqlQuery .= " SET " . $column . " = " . $value;
+            $sqlQuery .= " WHERE " . $whereCondition;
+            return $sqlQuery;
+        }
+
+        private function GetDeleteRows($tableName, $whereCondition)
+        {
+            $sqlQuery = "DELETE";
+            $sqlQuery .= " FROM " . $tableName;
+            $sqlQuery .= " WHERE " . $whereCondition;
             return $sqlQuery;
         }
 
@@ -89,6 +107,16 @@
         public function SelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition)
         {
             return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition));
+        }
+
+        public function UpdateRows($tableName, $column, $value, $whereCondition)
+        {
+            return $this->Query($this->GetUpdateRows($tableName, $column, $value, $whereCondition));
+        }
+
+        public function DeleteRows($tableName, $whereCondition)
+        {
+            return $this->Query($this->GetDeleteRows($tableName, $whereCondition));
         }
 
         //End of Public functions
@@ -142,7 +170,7 @@
                     );
                     if($operation["successful"])
                     {
-                        respond(200, "Row successfully inserted (" . $operation["response"] . ")"); //Ok
+                        respond(200, "Inserted successfully (" . $operation["response"] . ")"); //Ok
                     }
                     else
                     {
@@ -174,7 +202,63 @@
                 }
                 else
                 {
-                    respond(400, "'searchBook' needs 'keyword' which is the string to be searched"); //Bad request
+                    respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
+                }
+            }
+            else if($requestData["type"] == "updateBook")
+            {
+                if(isset($requestData["id"]))
+                {
+                    if(isset($requestData["column"]))
+                    {
+                        if(isset($requestData["value"]))
+                        {
+                            $id = $requestData["id"];
+                            $column = $requestData["column"];
+                            $value = $requestData["value"];
+                            $operation = $dbManager->UpdateRows("Libro", $column, $value, "CodiceLibro = " . $id);
+                            if($operation["successful"])
+                            {
+                                respond(200, "Updated successfully (" . $operation["response"] . ")");
+                            }
+                            else
+                            {
+                                respond(500, "Couldn't update row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                            }
+                        }
+                        else
+                        {
+                            respond(400, "'updateBook' requires 'value' which is the value that will modify the column");
+                        }
+                    }
+                    else
+                    {
+                        respond(400, "'updateBook' requires 'column' which is the string identifying the column to modify");
+                    }
+                }
+                else
+                {
+                    respond(400, "'updateBook' requires 'id' which is the primary key of the book to be modified");
+                }
+            }
+            else if($requestData["type"] == "deleteBook")
+            {
+                if(isset($requestData["id"]))
+                {
+                    $id = $requestData["id"];
+                    $operation = $dbManager->DeleteRows("Libro", "CodiceLibro = " . $id);
+                    if($operation["successful"])
+                    {
+                        respond(200, "Deleted successfully (" . $operation["response"] . ")");
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't delete row: " . $operation["response"] . " - Last query was: " . $dbManager->lastQuery);
+                    }
+                }
+                else
+                {
+                    respond(400, "'deleteBook' requires 'id' which is the primary key of the book to be deleted");
                 }
             }
             else if($requestData["type"] == "listUsers")
