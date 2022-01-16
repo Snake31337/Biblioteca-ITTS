@@ -1,8 +1,6 @@
 <?php
 
-use JetBrains\PhpStorm\ArrayShape;
-
-function respond($statusCode, $data)
+    function respond($statusCode, $data)
     {
         http_response_code($statusCode);
         header('Content-Type: application/json; charset=utf-8');
