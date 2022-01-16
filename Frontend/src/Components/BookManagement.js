@@ -1,21 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react'
 
-import '../CSS/Home.scss';
-import NavBar from './Navbar';
-import SearchBar from './SearchBar';
-import SideNavBar from './SideNavBar';
 import BookTable from './BookTable';
-import BookForm from './BookForm';
+import BookForm from './BookForm'
+import Modal from './Modal'
+import SearchBar from './SearchBar';
 
 import {currentIP} from './IPAddress'
 
+import '../CSS/UserManagement.scss'
+import '../CSS/Home.scss';
+import '../CSS/Button.scss'
 
-class Home extends React.Component
-{
-    constructor(props) 
-    {
+export default class BookManagement extends React.Component {
+    constructor(props) {
         super(props);
-        this.state = { databaseData: null };
+        this.state = {
+          open: false,
+          databaseData: null
+        };
 
         this.fetchRemoteData = this.fetchRemoteData.bind(this);
     }
@@ -79,36 +81,32 @@ class Home extends React.Component
         this.fetchRemoteData();
     }
 
-    render()
-    {
-        return (
-            <div className="Home">
-                <header className="navBar-container">
-                    <NavBar />
-                </header>
-                <div className="grid-container">
-                    <div className="grid-item left-sidebar">
-                        <div className="sideNavBar-container">
-                            <SideNavBar />
-                        </div>
-                    </div>
-                    <div className="grid-item main">
-                        <div className="main-wrapper">
-                            <div className="main-item searchBar-container">
-                                <SearchBar updateKeyword={this.updateKeyword} />
-                            </div>
+    render(){
+    return (
+        <div>
+            <div className="grid-item main">
+                <div className='main-wrapper'>
+                        <h1 className="title">Libri</h1>
+
+                        <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
                             <BookForm />
-                                
-                            <div className="main-item bookTable-container">
+                        </Modal>
+        
+                        <div className="main-item searchBar-container">
+                                <SearchBar updateKeyword={this.updateKeyword} />
+                        </div>
+
+                        <button className='button rounded' onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
+                            <div className="label">Aggiungi Libro</div>
+                            <i class="bi bi-plus-circle icon"></i>
+                        </button>
+                          
+                        <div className="main-item bookTable-container">
                                 <BookTable data={this.state.databaseData} />
-                            </div>
                         </div>
                     </div>
-                    <div className="grid-item rigth-sidebar"></div>
                 </div>
             </div>
         );
-    }   
+    }
 }
-
-export default Home;

@@ -1,6 +1,8 @@
 import '../CSS/Table.scss'; 
 import React from 'react';
 import FunctionButtons from './FunctionButtons';
+import 'semantic-ui-css/semantic.min.css'   
+import { Loader } from 'semantic-ui-react'
 
 export default class BookTable extends React.Component
 {
@@ -66,7 +68,19 @@ export default class BookTable extends React.Component
 
     render()
     {
-        if(Array.isArray(this.props.data) && this.props.data.length > 0)
+        if(this.props.data == null)
+        {
+            return (
+                <div className="table-container">
+                    <table className="book-table">
+                        <br></br>
+                            <Loader active indeterminate inline='centered'>Fetching data</Loader>
+                        <br></br>
+                    </table>
+                </div>
+            )
+        }
+        else if(Array.isArray(this.props.data) && this.props.data.length > 0)
         {
             return (
                 <div className="table-container">
@@ -86,7 +100,7 @@ export default class BookTable extends React.Component
                                 this.props.data.map((decodedData) => (
                                     <tr key={decodedData.CodiceLibro} onMouseEnter={(e) => this.MouseEnter(e, decodedData.CodiceLibro)} onMouseLeave={(e) => this.MouseLeave(e)}>
                                         <td>{decodedData.Titolo}</td>
-                                        <td>{decodedData.Nome} {decodedData.Cognome}</td>
+                                        <td>{decodedData.Autore}</td>
                                         <td>{decodedData.Editore}</td>
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
@@ -114,7 +128,7 @@ export default class BookTable extends React.Component
                                 <th><i className="bi bi-house"></i>Editore</th>
                                 <th><i className="bi bi-calendar-event"></i>Anno</th>
                                 <th><i className="bi bi-translate"></i>Lingua</th>
-                                <th>Azione</th>
+                                <th className="functionButtons-column">Azione</th>
                             </tr>
                         </thead>
                         <tbody>
