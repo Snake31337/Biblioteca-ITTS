@@ -41,8 +41,6 @@ export default class BookTable extends React.Component
         //this.setState({ showRow: [true, bookKey] });
 
         this.props.fetchRemoteData();
-
-
     }
 
     CheckRowState() {
@@ -58,7 +56,7 @@ export default class BookTable extends React.Component
                 <td>{decodedData.AnnoPubblicazione}</td>
                 <td>{decodedData.Lingua}</td>
                 <td className="functionButtons-cell">
-                    <FunctionButtons removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
+                    <FunctionButtons formType="bookForm" removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                 </td>
             </tr>
         ))
@@ -105,10 +103,11 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            <FunctionButtons removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
+                                            <FunctionButtons formType="bookForm" removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                                         </td>
                                     </tr>
                                 ))
+                                
                                 //this.PrintTable()
                             }
                         </tbody>
