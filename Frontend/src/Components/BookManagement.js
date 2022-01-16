@@ -7,9 +7,10 @@ import SearchBar from './SearchBar';
 
 import {currentIP} from './IPAddress'
 
-import '../CSS/UserManagement.scss'
+import '../CSS/UserManagement.scss';
 import '../CSS/Home.scss';
-import '../CSS/Button.scss'
+import '../CSS/Button.scss';
+import '../CSS/BookManagement.scss';
 
 export default class BookManagement extends React.Component {
     constructor(props) {
