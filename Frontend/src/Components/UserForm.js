@@ -28,21 +28,44 @@ class UserForm extends React.Component{
 
         console.log(JSON.stringify(this.state));
 
-        fetch(currentIP, {
-            method: "POST",
-            
-            body: JSON.stringify({
-                type: 'insertUser',
-                userArgs: this.state,
+        if(this.props.requestType === "update") {
+            console.log("UPDATEEEEEE");
+            console.log(this.props.requestType);
+            console.log(this.props.elementID);
+            fetch(currentIP, {
+                method: "POST",
+                
+                body: JSON.stringify({
+                    type: 'updateUser',
+                    id: this.props.elementID,
+                    userArgs: this.state,
+                })
+            }).then((response) => response.json())
+            .then((responseJson) => {
+              this.setState({ data : responseJson })
             })
-        }).then((response) => response.json())
-        .then((responseJson) => {
-          this.setState({ data : responseJson })
-        })
-        .then((response) => {console.log(response.json())})
-        .catch((error) => {
-          console.error(error);
-        });
+            .then((response) => {console.log(response.json())})
+            .catch((error) => {
+              console.error(error);
+            });
+        } else {
+            fetch(currentIP, {
+                method: "POST",
+                
+                body: JSON.stringify({
+                    type: 'insertUser',
+                    userArgs: this.state,
+                })
+            }).then((response) => response.json())
+            .then((responseJson) => {
+              this.setState({ data : responseJson })
+            })
+            .then((response) => {console.log(response.json())})
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+        
     }
     
 
