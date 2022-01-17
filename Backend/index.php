@@ -52,7 +52,7 @@
         // SQL string methods //
         //####################//
 
-        private function GetInsertRow($tableName, $columnsAndValues)
+        public function GetInsertRow($tableName, $columnsAndValues)
         {
             $columns = array_keys($columnsAndValues);
             $values = array_values($columnsAndValues);
@@ -63,16 +63,18 @@
             return $sqlQuery;
         }
 
-        private function GetSelectRows($tableName, $columns, $whereCondition)
+        public function GetSelectRows($tableName, $columns, $whereCondition, $orderBy)
         {
             $sqlQuery = "SELECT " . implode(", ", $columns);
             $sqlQuery .= " FROM " . $tableName;
             if($whereCondition != "")
                 $sqlQuery .= " WHERE " . $whereCondition;
+            if($orderBy != "")
+                $sqlQuery .= " ORDER BY " . $orderBy;
             return $sqlQuery;
         }
 
-        private function GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition)
+        public function GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
         {
             $sqlQuery = "SELECT " . implode(", ", $columnsWithTables);
             $sqlQuery .= " FROM " . $tableName1 . ", " . $tableName2 . ", " . $relationTable;
@@ -80,10 +82,12 @@
             $sqlQuery .= " AND " . $tableName2 . "." . $primaryKey2 . " = " . $relationTable . "." . $primaryKey2;
             if($whereCondition != "")
                 $sqlQuery .= " AND " . $whereCondition;
+            if($orderBy != "")
+                $sqlQuery .= " ORDER BY " . $orderBy;
             return $sqlQuery;
         }
 
-        private function GetUpdateRows($tableName, $columnsAndValues, $whereCondition)
+        public function GetUpdateRows($tableName, $columnsAndValues, $whereCondition)
         {
             $setArray = Array();
 
@@ -95,7 +99,7 @@
             return $sqlQuery;
         }
 
-        private function GetDeleteRows($tableName, $whereCondition)
+        public function GetDeleteRows($tableName, $whereCondition)
         {
             $sqlQuery = "DELETE";
             $sqlQuery .= " FROM " . $tableName;
@@ -114,14 +118,14 @@
             return $this->Query($this->GetInsertRow($tableName, $columnsAndValues));
         }
 
-        public function SelectRows($tableName, $columns, $whereCondition)
+        public function SelectRows($tableName, $columns, $whereCondition, $orderBy)
         {
-            return $this->Query($this->GetSelectRows($tableName, $columns, $whereCondition));
+            return $this->Query($this->GetSelectRows($tableName, $columns, $whereCondition, $orderBy));
         }
 
-        public function SelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition)
+        public function SelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
         {
-            return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition));
+            return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy));
         }
 
         public function UpdateRows($tableName, $columnsAndValues, $whereCondition)
@@ -144,7 +148,7 @@
 
             $whereCondition = "TABLE_NAME = \"" . $tableName . "\"";
             $whereCondition .= " AND " . implode(" OR ", $whereArray);
-            $operation = $this->Query($this->GetSelectRows("INFORMATION_SCHEMA.COLUMNS", Array("COLUMN_NAME", "DATA_TYPE"), $whereCondition));
+            $operation = $this->Query($this->GetSelectRows("INFORMATION_SCHEMA.COLUMNS", Array("COLUMN_NAME", "DATA_TYPE"), $whereCondition, ""));
             if($operation)
             {
                 $typesArray = Array();
@@ -188,7 +192,22 @@
         {
             if($requestData["type"] == "listBooks")
             {
-                $operation = $dbManager->SelectRows("Libro", Array("*"), "");
+                $operation = $dbManager->SelectRows("Libro", Array("*"), "", "");
+                if($operation)
+                {
+                    $resultArray = Array();
+                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                        array_push($resultArray, $row);
+                    respond(200, $resultArray); //Ok
+                }
+                else
+                {
+                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                }
+            }
+            else if($requestData["type"] == "listBooksWithPrestato")
+            {
+                $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), "", "");
                 if($operation)
                 {
                     $resultArray = Array();
@@ -230,6 +249,38 @@
                         $by = $requestData["by"];
                         $keyword = $requestData["keyword"];
                         $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'");
+                        if($operation)
+                        {
+                            $resultArray = Array();
+                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                array_push($resultArray, $row);
+                            respond(200, $resultArray); //Ok
+                        }
+                        else
+                        {
+                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                        }
+                    }
+                    else
+                    {
+                        respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
+                    }
+                }
+                else
+                {
+                    respond(400, "'searchBook' requires 'by' which is the name of the field to search");
+                }
+                
+            }
+            else if($requestData["type"] == "searchBookWithPrestato")
+            {
+                if(isset($requestData["by"]))
+                {
+                    if(isset($requestData["keyword"]))
+                    {
+                        $by = $requestData["by"];
+                        $keyword = $requestData["keyword"];
+                        $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), $by . " LIKE '%" . $keyword . "%'", "");
                         if($operation)
                         {
                             $resultArray = Array();
@@ -303,7 +354,7 @@
             }
             else if($requestData["type"] == "listUsers")
             {
-                $operation = $dbManager->SelectRows("Utente", Array("*"), "");
+                $operation = $dbManager->SelectRows("Utente", Array("*"), "", "");
                 if($operation)
                 {
                     $resultArray = Array();
@@ -344,7 +395,7 @@
                     {
                         $by = $requestData["by"];
                         $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Utente", Array("*"), $by . " LIKE '%" . $keyword . "%'");
+                        $operation = $dbManager->SelectRows("Utente", Array("*"), $by . " LIKE '%" . $keyword . "%'", "");
                         if($operation)
                         {
                             $resultArray = Array();
@@ -417,7 +468,7 @@
             }
             else if($requestData["type"] == "listBorrows")
             {
-                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Utente.CodiceFiscale = Prestito.CodiceFiscale AND Libro.CodiceLibro = Prestito.CodiceLibro");
+                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Utente.CodiceFiscale = Prestito.CodiceFiscale AND Libro.CodiceLibro = Prestito.CodiceLibro", "");
                 if($operation)
                 {
                     $resultArray = Array();
@@ -458,7 +509,7 @@
                     {
                         $by = $requestData["by"];
                         $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), $by . " LIKE '%" . $keyword . "%'");
+                        $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), $by . " LIKE '%" . $keyword . "%'", "");
                         if($operation)
                         {
                             $resultArray = Array();
