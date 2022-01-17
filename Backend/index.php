@@ -169,7 +169,7 @@
                 while($row = mysqli_fetch_row($this->lastResult))
                     $typesArray[$row[0]] = $row[1];
                 foreach($data as $key => $value)
-                    if($typesArray[$key] == "varchar" || $typesArray[$key] == "date" || $typesArray[$key] == "year")
+                    if($typesArray[$key] == "varchar" || $typesArray[$key] == "date")
                         $data[$key] = "\"" . $data[$key] . "\"";
                 
                 return $data;
