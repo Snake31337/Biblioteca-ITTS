@@ -192,32 +192,48 @@
         {
             if($requestData["type"] == "listBooks")
             {
-                $operation = $dbManager->SelectRows("Libro", Array("*"), "", "");
-                if($operation)
+                if(isset($requestData["orderBy"]))
                 {
-                    $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                        array_push($resultArray, $row);
-                    respond(200, $resultArray); //Ok
+                    $orderBy = $requestData["orderBy"];
+                    $operation = $dbManager->SelectRows("Libro", Array("*"), "", $orderBy);
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(400, "'listBooks' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "listBooksWithPrestato")
             {
-                $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), "", "");
-                if($operation)
+                if(isset($requestData["orderBy"]))
                 {
-                    $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                        array_push($resultArray, $row);
-                    respond(200, $resultArray); //Ok
+                    $orderBy = $requestData["orderBy"];
+                    $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), "", $orderBy);
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(400, "'listBooksWithPrestato' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "insertBook")
@@ -242,67 +258,82 @@
             }
             else if($requestData["type"] == "searchBook")
             {
-                if(isset($requestData["by"]))
+                if(isset($requestData["orderBy"]))
                 {
-                    if(isset($requestData["keyword"]))
+                    $orderBy = $requestData["orderBy"];
+                    if(isset($requestData["by"]))
                     {
-                        $by = $requestData["by"];
-                        $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'", "");
-                        if($operation)
+                        if(isset($requestData["keyword"]))
                         {
-                            $resultArray = Array();
-                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                                array_push($resultArray, $row);
-                            respond(200, $resultArray); //Ok
+                            $by = $requestData["by"];
+                            $keyword = $requestData["keyword"];
+                            $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            if($operation)
+                            {
+                                $resultArray = Array();
+                                while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                    array_push($resultArray, $row);
+                                respond(200, $resultArray); //Ok
+                            }
+                            else
+                            {
+                                respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            }
                         }
                         else
                         {
-                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
                         }
                     }
                     else
                     {
-                        respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
+                        respond(400, "'searchBook' requires 'by' which is the name of the field to search");
                     }
                 }
                 else
                 {
-                    respond(400, "'searchBook' requires 'by' which is the name of the field to search");
+                    respond(400, "'searchBook' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
                 
             }
             else if($requestData["type"] == "searchBookWithPrestato")
             {
-                if(isset($requestData["by"]))
+                if(isset($requestData["orderBy"]))
                 {
-                    if(isset($requestData["keyword"]))
+                    if(isset($requestData["by"]))
                     {
-                        $by = $requestData["by"];
-                        $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), $by . " LIKE '%" . $keyword . "%'", "");
-                        if($operation)
+                        if(isset($requestData["keyword"]))
                         {
-                            $resultArray = Array();
-                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                                array_push($resultArray, $row);
-                            respond(200, $resultArray); //Ok
+                            $orderBy = $requestData["orderBy"];
+                            $by = $requestData["by"];
+                            $keyword = $requestData["keyword"];
+                            $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            if($operation)
+                            {
+                                $resultArray = Array();
+                                while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                    array_push($resultArray, $row);
+                                respond(200, $resultArray); //Ok
+                            }
+                            else
+                            {
+                                respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            }
                         }
                         else
                         {
-                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
                         }
                     }
                     else
                     {
-                        respond(400, "'searchBook' requires 'keyword' which is the string to be searched"); //Bad request
+                        respond(400, "'searchBook' requires 'by' which is the name of the field to search");
                     }
                 }
                 else
                 {
-                    respond(400, "'searchBook' requires 'by' which is the name of the field to search");
+                    respond(400, "'searchBook' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
-                
             }
             else if($requestData["type"] == "updateBook")
             {
@@ -354,17 +385,25 @@
             }
             else if($requestData["type"] == "listUsers")
             {
-                $operation = $dbManager->SelectRows("Utente", Array("*"), "", "");
-                if($operation)
+                if(isset($requestData["orderBy"]))
                 {
-                    $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                        array_push($resultArray, $row);
-                    respond(200, $resultArray); //Ok
+                    $orderBy = $requestData["orderBy"];
+                    $operation = $dbManager->SelectRows("Utente", Array("*"), "", $orderBy);
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(400, "'listUsers' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "insertUser")
@@ -389,33 +428,41 @@
             }
             else if($requestData["type"] == "searchUser")
             {
-                if(isset($requestData["by"]))
-                {
-                    if(isset($requestData["keyword"]))
+                if(isset($requestData["orderBy"]))
+                {   
+                    if(isset($requestData["by"]))
                     {
-                        $by = $requestData["by"];
-                        $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Utente", Array("*"), $by . " LIKE '%" . $keyword . "%'", "");
-                        if($operation)
+                        if(isset($requestData["keyword"]))
                         {
-                            $resultArray = Array();
-                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                                array_push($resultArray, $row);
-                            respond(200, $resultArray); //Ok
+                            $orderBy = $requestData["orderBy"];
+                            $by = $requestData["by"];
+                            $keyword = $requestData["keyword"];
+                            $operation = $dbManager->SelectRows("Utente", Array("*"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            if($operation)
+                            {
+                                $resultArray = Array();
+                                while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                    array_push($resultArray, $row);
+                                respond(200, $resultArray); //Ok
+                            }
+                            else
+                            {
+                                respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            }
                         }
                         else
                         {
-                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            respond(400, "'searchUser' requires 'keyword' which is the string to be searched"); //Bad request
                         }
                     }
                     else
                     {
-                        respond(400, "'searchUser' requires 'keyword' which is the string to be searched"); //Bad request
+                        respond(400, "'searchUser' requires 'by' which is the name of the field to search");
                     }
                 }
                 else
                 {
-                    respond(400, "'searchUser' requires 'by' which is the name of the field to search");
+                    respond(400, "'searchUser' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "updateUser")
@@ -468,17 +515,25 @@
             }
             else if($requestData["type"] == "listBorrows")
             {
-                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Utente.CodiceFiscale = Prestito.CodiceFiscale AND Libro.CodiceLibro = Prestito.CodiceLibro", "");
-                if($operation)
+                if(isset($requestData["orderBy"]))
                 {
-                    $resultArray = Array();
-                    while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                        array_push($resultArray, $row);
-                    respond(200, $resultArray); //Ok
+                    $orderBy = $requestData["orderBy"];
+                    $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Utente.CodiceFiscale = Prestito.CodiceFiscale AND Libro.CodiceLibro = Prestito.CodiceLibro", $orderBy);
+                    if($operation)
+                    {
+                        $resultArray = Array();
+                        while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                            array_push($resultArray, $row);
+                        respond(200, $resultArray); //Ok
+                    }
+                    else
+                    {
+                        respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    }
                 }
                 else
                 {
-                    respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                    respond(400, "'listBorrows' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "insertBorrow")
@@ -503,33 +558,41 @@
             }
             else if($requestData["type"] == "searchBorrow")
             {
-                if(isset($requestData["by"]))
+                if(isset($requestData["orderBy"]))
                 {
-                    if(isset($requestData["keyword"]))
+                    if(isset($requestData["by"]))
                     {
-                        $by = $requestData["by"];
-                        $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), $by . " LIKE '%" . $keyword . "%'", "");
-                        if($operation)
+                        if(isset($requestData["keyword"]))
                         {
-                            $resultArray = Array();
-                            while($row = mysqli_fetch_assoc($dbManager->lastResult))
-                                array_push($resultArray, $row);
-                            respond(200, $resultArray); //Ok
+                            $orderBy = $requestData["orderBy"];
+                            $by = $requestData["by"];
+                            $keyword = $requestData["keyword"];
+                            $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            if($operation)
+                            {
+                                $resultArray = Array();
+                                while($row = mysqli_fetch_assoc($dbManager->lastResult))
+                                    array_push($resultArray, $row);
+                                respond(200, $resultArray); //Ok
+                            }
+                            else
+                            {
+                                respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            }
                         }
                         else
                         {
-                            respond(500, "Couldn't select rows: " . $dbManager->lastError . " - Last query was: " . $dbManager->lastQuery); //Internal server error
+                            respond(400, "'searchBorrow' requires 'keyword' which is the string to be searched"); //Bad request
                         }
                     }
                     else
                     {
-                        respond(400, "'searchBorrow' requires 'keyword' which is the string to be searched"); //Bad request
+                        respond(400, "'searchBorrow' requires 'by' which is the name of the field to search");
                     }
                 }
                 else
                 {
-                    respond(400, "'searchBorrow' requires 'by' which is the name of the field to search");
+                    respond(400, "'searchBorrow' needs 'orderBy' which is the name of the field to consider when ordering output"); //Bad request
                 }
             }
             else if($requestData["type"] == "updateBorrow")
