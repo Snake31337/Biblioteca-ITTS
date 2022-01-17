@@ -248,7 +248,7 @@
                     {
                         $by = $requestData["by"];
                         $keyword = $requestData["keyword"];
-                        $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'");
+                        $operation = $dbManager->SelectRows("Libro", Array("*"), $by . " LIKE '%" . $keyword . "%'", "");
                         if($operation)
                         {
                             $resultArray = Array();
