@@ -137,7 +137,7 @@
 
 
         public function FixData($data, $tableName)
-        {   
+        {
             $whereArray = Array();
             foreach($data as $key => $value)
                 array_push($whereArray, "COLUMN_NAME = \"" . $key . "\"");
@@ -375,7 +375,7 @@
                     {
                         $id = $requestData["id"];
                         $userArgs = $dbManager->FixData($requestData["userArgs"], "Utente");
-                        $operation = $dbManager->UpdateRows("Utente", $userArgs, "CodiceFiscale = " . $id);
+                        $operation = $dbManager->UpdateRows("Utente", $userArgs, "CodiceFiscale = '" . $id . "'");
                         if($operation)
                         {
                             respond(200, "Updated successfully (" . $dbManager->lastResult . ")");
@@ -417,7 +417,7 @@
             }
             else if($requestData["type"] == "listBorrows")
             {
-                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "");
+                $operation = $dbManager->SelectRows("Prestito, Utente, Libro", Array("Prestito.*", "Utente.Nome", "Utente.Cognome", "Libro.Titolo"), "Utente.CodiceFiscale = Prestito.CodiceFiscale AND Libro.CodiceLibro = Prestito.CodiceLibro");
                 if($operation)
                 {
                     $resultArray = Array();
