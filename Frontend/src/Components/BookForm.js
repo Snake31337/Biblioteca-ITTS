@@ -99,7 +99,7 @@ export default class BookForm extends React.Component{
                         </label>
                         <label>
                             Anno Pubblicazione:
-                            <input name="AnnoPubblicazione" type="date" value={this.state.AnnoPubblicazione} onChange={this.handleInputChange}></input>
+                            <input name="AnnoPubblicazione" type="number" value={this.state.AnnoPubblicazione} onChange={this.handleInputChange}></input>
                         </label>
                         <label>
                         Categoria:
