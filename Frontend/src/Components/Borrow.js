@@ -35,6 +35,7 @@ export default class Borrow extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'listBorrows',
+                    orderBy: 'DataInizioPrestito',
                 })
             })
             .then((response) => response.json())
@@ -57,6 +58,7 @@ export default class Borrow extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'searchBorrow',
+                    orderBy: 'DataInizioPrestito',
                     keyword: searchKey,
                 })
             })

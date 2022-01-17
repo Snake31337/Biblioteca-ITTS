@@ -35,7 +35,8 @@ export default class BookManagement extends React.Component {
                 method: 'POST',
                 body: JSON.stringify
                 ({
-                    type: 'listBooks',
+                    type: 'listBooksWithPrestato',
+                    orderBy: 'Titolo',
                 })
             })
             .then((response) => response.json())
@@ -57,7 +58,8 @@ export default class BookManagement extends React.Component {
                 method: 'POST',
                 body: JSON.stringify
                 ({
-                    type: 'searchBook',
+                    type: 'searchBookWithPrestato',
+                    orderBy: 'Titolo',
                     by: 'Libro.Titolo',
                     keyword: searchKey,
                 })

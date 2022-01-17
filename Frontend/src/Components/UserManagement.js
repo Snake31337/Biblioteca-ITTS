@@ -35,6 +35,7 @@ export default class UserManagement extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'listUsers',
+                    orderBy: 'Cognome',
                 })
             })
             .then((response) => response.json())
@@ -57,6 +58,7 @@ export default class UserManagement extends React.Component {
                 body: JSON.stringify
                 ({
                     type: 'searchUser',
+                    orderBy: 'Cognome',
                     by: 'Utente.NumeroTessera',
                     keyword: searchKey,
                 })

@@ -218,7 +218,7 @@
                 if(isset($requestData["orderBy"]))
                 {
                     $orderBy = $requestData["orderBy"];
-                    $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), "", $orderBy);
+                    $operation = $dbManager->SelectRows("Libro", Array("*", "(" . $dbManager->GetSelectRows("Prestito", Array("'Prestato'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), "", $orderBy);
                     if($operation)
                     {
                         $resultArray = Array();
@@ -307,7 +307,7 @@
                             $orderBy = $requestData["orderBy"];
                             $by = $requestData["by"];
                             $keyword = $requestData["keyword"];
-                            $operation = $dbManager->SelectRows("Libro", Array("*", $dbManager->GetSelectRows("Prestito", "'Prestato'", "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "")), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            $operation = $dbManager->SelectRows("Libro", Array("*", "(" . $dbManager->GetSelectRows("Prestito", Array("'Prestato'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
                             if($operation)
                             {
                                 $resultArray = Array();
