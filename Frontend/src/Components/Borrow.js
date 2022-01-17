@@ -109,7 +109,7 @@ export default class Borrow extends React.Component {
                                 <BorrowForm />
                             </Modal>
             
-                            <BorrowTable className="main-item" />
+                            <BorrowTable fetchRemoteData={this.fetchRemoteData} data={this.state.databaseData} className="main-item" />
                     </div>
                 </div>
             </div>
