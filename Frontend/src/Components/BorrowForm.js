@@ -6,7 +6,7 @@ import {currentIP} from './IPAddress'
 class BorrowForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = {Utente: '', Libro: '', DataPrestito: '', DataScadenza: ''};     
+        this.state = {CodiceFiscale: '', CodiceLibro: '', DataInizioPrestito: '', DataFinePrestito: ''};     
         
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,7 +33,7 @@ class BorrowForm extends React.Component{
             
             body: JSON.stringify({
                 type: 'insertBorrow',
-                userArgs: this.state,
+                borrowArgs: this.state,
             })
         }).then((response) => response.json())
         .then((responseJson) => {
@@ -56,19 +56,19 @@ class BorrowForm extends React.Component{
                     <form className='fields-container' onSubmit={this.handleSubmit}>
                     <label>
                         Utente:
-                        <input name="Utente" type="text" value={this.state.Utente} onChange={this.handleInputChange}></input>
+                        <input name="CodiceFiscale" type="text" value={this.state.CodiceFiscale} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
                         Libro: 
-                        <input name="Libro" type="text" value={this.state.Libro} onChange={this.handleInputChange}></input>
+                        <input name="CodiceLibro" type="text" value={this.state.CodiceLibro} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
                         Data Prestito:
-                        <input name="DataPrestito" type="text" value={this.state.DataPrestito} onChange={this.handleInputChange}></input>
+                        <input name="DataInizioPrestito" type="date" value={this.state.DataInizioPrestito} onChange={this.handleInputChange}></input>
                     </label>
                     <label>
                         Data Scadenza:
-                        <input name="DataScadenza" type="text" value={this.state.DataScadenza} onChange={this.handleInputChange}></input>
+                        <input name="DataFinePrestito" type="date" value={this.state.DataFinePrestito} onChange={this.handleInputChange}></input>
                     </label>
 
                     <input className='submitButton' type='submit'/>

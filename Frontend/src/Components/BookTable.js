@@ -85,6 +85,7 @@ export default class BookTable extends React.Component
                     <table className="book-table">
                         <thead>
                             <tr className='first-row'>
+                                <th><i class="bi bi-fingerprint"></i>ID</th>
                                 <th><i className="bi bi-file-earmark-font"></i>Titolo</th>
                                 <th><i className="bi bi-people-fill"></i>Autore/i</th>
                                 <th><i className="bi bi-house"></i>Editore</th>
@@ -97,6 +98,7 @@ export default class BookTable extends React.Component
                             {
                                 this.props.data.map((decodedData) => (
                                     <tr key={decodedData.CodiceLibro} onMouseEnter={(e) => this.MouseEnter(e, decodedData.CodiceLibro)} onMouseLeave={(e) => this.MouseLeave(e)}>
+                                        <td>{decodedData.CodiceLibro}</td>
                                         <td>{decodedData.Titolo}</td>
                                         <td>{decodedData.Autore}</td>
                                         <td>{decodedData.Editore}</td>
@@ -122,6 +124,7 @@ export default class BookTable extends React.Component
                     <table className="book-table">
                         <thead>
                             <tr className='first-row'>
+                                <th><i class="bi bi-fingerprint"></i>ID</th>
                                 <th><i className="bi bi-file-earmark-font"></i>Titolo e ISBN</th>
                                 <th><i className="bi bi-people-fill"></i>Autore/i</th>
                                 <th><i className="bi bi-house"></i>Editore</th>
@@ -132,6 +135,7 @@ export default class BookTable extends React.Component
                         </thead>
                         <tbody>
                             <tr>
+                                <td>No data</td>
                                 <td>No data</td>
                                 <td>No data</td>
                                 <td>No data</td>

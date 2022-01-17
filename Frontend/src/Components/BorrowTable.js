@@ -52,30 +52,23 @@ export default class BorrowTable extends React.Component {
     }
 
 
-    componentWillMount() {
-        this.renderMyData();
-    }
-
-
-    renderMyData(){
-        fetch(currentIP, {
-            method: 'POST',
-            body: JSON.stringify({
-            //Il type è da sostituire    
-            type: 'listBorrows',
-        })
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              this.setState({ data : responseJson })
-            })
-            .then((response) => {console.log(response.json())})
-            .catch((error) => {
-                this.setState({errorMessage: error.message})
-            });
-    }   
 
     render(){
+    if(this.props.data == null)
+        {
+            return (
+                <div className="table-container">
+                    <table className="book-table">
+                        <br></br>
+                            <Loader active indeterminate inline='centered'>Fetching data</Loader>
+                        <br></br>
+                    </table>
+                </div>
+            )
+        }else if(Array.isArray(this.props.data) && this.props.data.length > 0)
+        {
+
+        
     return(
     <div className="table-container">
         <table className="book-table">
@@ -92,18 +85,19 @@ export default class BorrowTable extends React.Component {
             </thead>
             <tbody>
             {
-                this.state.data.map((decodedData) => (
+                this.props.data.map((decodedData) => (
                     
-                    <tr key={decodedData.Prestito}>
-                    <td>{decodedData.CodiceLibro}</td>
-                    <td>{decodedData.CodiceFiscale}</td>
-                    <td>{decodedData.DataInizioPrestito}</td>
-                    <td>{decodedData.DataFinePrestito}</td>
-                    <td></td>
-                    <td className="functionButtons-cell">
-                        {new Date().toJSON().slice(0,10).replace(/-/g,'/') > decodedData.DataFinePrestito
-                        ? (<i class="bi bi-exclamation"></i>)
-                        : null
+                    <tr key={decodedData.CodicePrestito}>
+                        <td>{decodedData.CodicePrestito}</td>
+                        <td>{decodedData.Nome + " " + decodedData.Cognome}</td>
+                        <td>{decodedData.Titolo}</td>
+                        <td>{decodedData.DataInizioPrestito}</td>
+                        <td>{decodedData.DataFinePrestito}</td>
+                    
+                    <td>
+                        {new Date() > new Date(decodedData.DataFinePrestito)
+                        ? (<i class="bi bi-exclamation">Scaduto</i>)
+                        : (null)
                         
                         }
                         {/* <FunctionButtons removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} /> */}
@@ -117,6 +111,35 @@ export default class BorrowTable extends React.Component {
         </table>
         <div>{this.state.errorMessage}</div>
     </div>
-    )};
-    
+    )
+    }else
+    {
+        return (
+            <div className="table-container">
+                <table className="book-table">
+                    <thead>
+                    <tr className='first-row'>
+                        <th><i className="bi bi-file-earmark-font"></i>ID Prestito</th>
+                        <th><i className="bi bi-people-fill"></i>Utente/i</th>
+                        <th>Libro</th>
+                        <th><i class="bi bi-calendar-event"></i>Data Prestito</th>
+                        <th><i class="bi bi-globe"></i>Data Scadenza</th>
+                        <th><i class="bi bi-exclamation-triangle"></i>Scaduto</th>    
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                            <td>No data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+    }
 }
