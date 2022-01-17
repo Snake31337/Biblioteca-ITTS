@@ -67,6 +67,11 @@ export default class FunctionButtons extends React.Component
         }
     }
 
+    handleOpenChange() {
+        this.setState({open: false});
+        this.fetchRemoteData();
+    }
+
     RenderForm() {
         console.log(this.props.formType);
         switch(this.props.formType) {
