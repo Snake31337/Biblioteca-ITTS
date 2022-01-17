@@ -91,6 +91,7 @@ export default class BookTable extends React.Component
                                 <th><i className="bi bi-house"></i>Editore</th>
                                 <th><i className="bi bi-calendar-event"></i>Anno</th>
                                 <th><i className="bi bi-translate"></i>Lingua</th>
+                                <th><i className="bi bi-book"></i>Stato</th>
                                 <th className="functionButtons-column"></th>
                             </tr>
                         </thead>
@@ -104,6 +105,7 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.Editore}</td>
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
+                                        <td>{decodedData.Stato}</td>
                                         <td className="functionButtons-cell">
                                             <FunctionButtons handleOpenChange={this.props.handleOpenChange} formType="bookForm" removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                                         </td>
