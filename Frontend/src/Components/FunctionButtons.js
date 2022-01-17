@@ -91,10 +91,10 @@ export default class FunctionButtons extends React.Component
             return (
                 <div className="FunctionButtons">
                         <button type="button" className="functionButtons-button" onClick={() => {this.setState({open: true}); console.log("Aperto il Popup");}}>
-                            <i className="functionButtons-icon bi bi-pen-fill"></i>
+                            <i className="functionButtons-icon bi bi-pen-fill icon-modify"></i>
                         </button>
                         <button type="button" className="functionButtons-button" onClick={this.deleteElement}>
-                            <i className="functionButtons-icon bi bi-x-lg"></i>
+                            <i className="functionButtons-icon bi bi-x-lg icon-delete"></i>
                         </button>
 
                         <Modal open={this.state.open} onClose={() => this.setState({open: false})}>
