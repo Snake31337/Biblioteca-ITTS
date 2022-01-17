@@ -63,9 +63,16 @@
             return $sqlQuery;
         }
 
-        public function GetSelectRows($tableName, $columns, $whereCondition, $orderBy)
+        public function GetSelectRows($tableName, $aliasesAndColumns, $whereCondition, $orderBy)
         {
-            $sqlQuery = "SELECT " . implode(", ", $columns);
+            $selectArray = Array();
+            foreach($aliasesAndColumns as $alias => $column)
+                if(is_string($alias))
+                    array_push($selectArray, $column . " AS " . $alias);
+                else
+                    array_push($selectArray, $column);
+
+            $sqlQuery = "SELECT " . implode(", ", $selectArray);
             $sqlQuery .= " FROM " . $tableName;
             if($whereCondition != "")
                 $sqlQuery .= " WHERE " . $whereCondition;
@@ -74,9 +81,16 @@
             return $sqlQuery;
         }
 
-        public function GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
+        public function GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $aliasesAndColumnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
         {
-            $sqlQuery = "SELECT " . implode(", ", $columnsWithTables);
+            $selectArray = Array();
+            foreach($aliasesAndColumnsWithTables as $alias => $column)
+                if(is_string($alias))
+                    array_push($selectArray, $column . " AS " . $alias);
+                else
+                    array_push($selectArray, $column);
+
+            $sqlQuery = "SELECT " . implode(", ", $selectArray);
             $sqlQuery .= " FROM " . $tableName1 . ", " . $tableName2 . ", " . $relationTable;
             $sqlQuery .= " WHERE " . $tableName1 . "." . $primaryKey1 . " = " . $relationTable . "." . $primaryKey1;
             $sqlQuery .= " AND " . $tableName2 . "." . $primaryKey2 . " = " . $relationTable . "." . $primaryKey2;
@@ -90,10 +104,10 @@
         public function GetUpdateRows($tableName, $columnsAndValues, $whereCondition)
         {
             $setArray = Array();
-
-            $sqlQuery = "UPDATE " . $tableName;
             foreach($columnsAndValues as $column => $value)
                 array_push($setArray, $column . " = " . $value);
+
+            $sqlQuery = "UPDATE " . $tableName;
             $sqlQuery .= " SET " . implode(",", $setArray);
             $sqlQuery .= " WHERE " . $whereCondition;
             return $sqlQuery;
@@ -118,14 +132,14 @@
             return $this->Query($this->GetInsertRow($tableName, $columnsAndValues));
         }
 
-        public function SelectRows($tableName, $columns, $whereCondition, $orderBy)
+        public function SelectRows($tableName, $aliasesAndColumns, $whereCondition, $orderBy)
         {
-            return $this->Query($this->GetSelectRows($tableName, $columns, $whereCondition, $orderBy));
+            return $this->Query($this->GetSelectRows($tableName, $aliasesAndColumns, $whereCondition, $orderBy));
         }
 
-        public function SelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
+        public function SelectRowsRelationNN($tableName1, $tableName2, $relationTable, $aliasesAndColumnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy)
         {
-            return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $columnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy));
+            return $this->Query($this->GetSelectRowsRelationNN($tableName1, $tableName2, $relationTable, $aliasesAndColumnsWithTables, $primaryKey1, $primaryKey2, $whereCondition, $orderBy));
         }
 
         public function UpdateRows($tableName, $columnsAndValues, $whereCondition)
@@ -218,7 +232,7 @@
                 if(isset($requestData["orderBy"]))
                 {
                     $orderBy = $requestData["orderBy"];
-                    $operation = $dbManager->SelectRows("Libro", Array("*", "(" . $dbManager->GetSelectRows("Prestito", Array("'Prestato'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), "", $orderBy);
+                    $operation = $dbManager->SelectRows("Libro", Array("*", "Stato"=>"(" . $dbManager->GetSelectRows("Prestito", Array("'In prestito'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), "", $orderBy);
                     if($operation)
                     {
                         $resultArray = Array();
@@ -307,7 +321,7 @@
                             $orderBy = $requestData["orderBy"];
                             $by = $requestData["by"];
                             $keyword = $requestData["keyword"];
-                            $operation = $dbManager->SelectRows("Libro", Array("*", "(" . $dbManager->GetSelectRows("Prestito", Array("'Prestato'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
+                            $operation = $dbManager->SelectRows("Libro", Array("*", "Stato"=>"(" . $dbManager->GetSelectRows("Prestito", Array("'In prestito'"), "Libro.CodiceLibro = Prestito.CodiceLibro AND CURDATE() > Prestito.DataInizioPrestito AND CURDATE() < Prestito.DataFinePrestito", "") . ")"), $by . " LIKE '%" . $keyword . "%'", $orderBy);
                             if($operation)
                             {
                                 $resultArray = Array();
