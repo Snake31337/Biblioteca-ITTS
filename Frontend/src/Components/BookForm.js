@@ -67,7 +67,7 @@ export default class BookForm extends React.Component{
 
         }
         
-        this.props.handleOpenChange(); // quando si fa submit fa il backcall della funzione in BookManagement
+        //this.props.handleOpenChange(); // quando si fa submit fa il backcall della funzione in BookManagement
     }
     
     render(){

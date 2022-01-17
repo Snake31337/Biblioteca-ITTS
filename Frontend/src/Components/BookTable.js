@@ -105,7 +105,7 @@ export default class BookTable extends React.Component
                                         <td>{decodedData.AnnoPubblicazione}</td>
                                         <td>{decodedData.Lingua}</td>
                                         <td className="functionButtons-cell">
-                                            <FunctionButtons formType="bookForm" removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
+                                            <FunctionButtons handleOpenChange={this.props.handleOpenChange} formType="bookForm" removeRow={this.removeRow} relativeTo={decodedData.CodiceLibro} hidden={this.CheckMouseState(decodedData.CodiceLibro) ? false : true} />
                                         </td>
                                     </tr>
                                 ))

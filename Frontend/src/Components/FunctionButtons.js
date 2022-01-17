@@ -73,7 +73,7 @@ export default class FunctionButtons extends React.Component
             case 'bookForm':
                 return <BookForm requestType="update" elementID={this.state.bookKey}/>;
             case 'userForm':
-                return <UserForm />;
+                return <UserForm requestType="update" elementID={this.state.bookKey}/>;
             default:
                 return null;
         }
